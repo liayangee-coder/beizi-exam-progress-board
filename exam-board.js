@@ -118,9 +118,19 @@
       if (!stored) return fallback;
       const parsed = JSON.parse(stored);
       const migrateLegacySchedule = parsed && typeof parsed === 'object' && !Array.isArray(parsed) && isLegacyDefaultSchedule(parsed.schedule);
+      // Convert only the former built-in sample tuple; preserve all other saved attendance values.
+      const migrateLegacyAttendance = parsed && typeof parsed === 'object' && !Array.isArray(parsed)
+        && Number(parsed.classSize) === 30 && Number(parsed.expected) === 30
+        && Number(parsed.actual) === 29 && String(parsed.absentSeats ?? '').trim() === '08';
       const normalized = normalizeConfig(parsed, fallback);
-      if (migrateLegacySchedule) {
-        try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...parsed, schedule: normalized.schedule })); } catch (error) { /* Keep the normalized three-course view even if storage is unavailable. */ }
+      if (migrateLegacyAttendance) Object.assign(normalized, { classSize: 27, expected: 27, actual: 27, absentSeats: '' });
+      if (migrateLegacySchedule || migrateLegacyAttendance) {
+        const migrated = {
+          ...parsed,
+          ...(migrateLegacySchedule ? { schedule: normalized.schedule } : {}),
+          ...(migrateLegacyAttendance ? { classSize: 27, expected: 27, actual: 27, absentSeats: '' } : {})
+        };
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated)); } catch (error) { /* Keep the normalized view even if storage is unavailable. */ }
       }
       return normalized;
     } catch (error) {
