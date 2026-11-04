@@ -830,7 +830,21 @@
     $('#emptySettingsButton').addEventListener('click', openDrawer);
     $('#settingsClose').addEventListener('click', closeDrawer);
     backdrop.addEventListener('click', closeDrawer);
-    document.addEventListener('contextmenu', (event) => event.preventDefault(), true);
+    const isEditableTarget = (target) => {
+      const element = target instanceof Element ? target : target?.parentElement;
+      return Boolean(element?.closest('input, textarea, select, [contenteditable="true"], [role="textbox"]'));
+    };
+    // Discourage casual copying on the display while preserving normal editing controls.
+    // This is not a security boundary: public client-side code remains inspectable.
+    document.addEventListener('contextmenu', (event) => {
+      if (!isEditableTarget(event.target)) event.preventDefault();
+    }, true);
+    document.addEventListener('selectstart', (event) => {
+      if (!isEditableTarget(event.target)) event.preventDefault();
+    }, true);
+    document.addEventListener('copy', (event) => {
+      if (!isEditableTarget(event.target)) event.preventDefault();
+    }, true);
     document.addEventListener('keydown', (event) => {
       const key = event.key.toLowerCase();
       const modifier = event.ctrlKey || event.metaKey;
