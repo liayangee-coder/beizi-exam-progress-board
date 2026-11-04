@@ -3,6 +3,7 @@
 
   const STORAGE_KEY = 'buzies-exam-progress-board-v1';
   const COURSE_OPTIONS = ['國語', '數學', '英語', '自然', '社會', '健康', '自修', '作文', '資訊', '體育', '國文', '英文', '生活'];
+  const THEME_OPTIONS = ['lavender', 'peach', 'mint', 'sky'];
   const DEFAULT_EXAM_MESSAGES = [
     '請先確認姓名、班級和座號，再開始作答。',
     '仔細讀題，確認題目要問什麼，再下筆。',
@@ -16,6 +17,7 @@
     ['考卷有不會的問題，等出題老師來了再問', '不要轉頭玩東西，寫完多檢查', '檢查完再檢查或趴下休息', '考試即將結束，檢查有沒有寫答案抄錯'],
     ['考卷有不會的問題，等出題老師來了再問', '不要玩文具，寫完多檢查', '檢查完再檢查或趴下休息', '考試即將結束，檢查有沒有寫答案抄錯']
   ];
+  const LEGACY_BREAK_MESSAGES = ['等監考老師點完再離開座位下課', '利用下課準備下個科目與文具用品', '提早上廁所喝水'];
   const BPMF = {
     '廍':'ㄅㄨˋ','子':'ㄗˇ','國':'ㄍㄨㄛˊ','小':'ㄒㄧㄠˇ','段':'ㄉㄨㄢˋ','考':'ㄎㄠˇ','進':'ㄐㄧㄣˋ','度':'ㄉㄨˋ','看':'ㄎㄢˋ','板':'ㄅㄢˇ',
     '三':'ㄙㄢ','年':'ㄋㄧㄢˊ','二':'ㄦˋ','班':'ㄅㄢ','期':'ㄑㄧˊ','中':'ㄓㄨㄥ','定':'ㄉㄧㄥˋ','評':'ㄆㄧㄥˊ','量':'ㄌㄧㄤˋ',
@@ -50,22 +52,19 @@
 
   const DEFAULT_CONFIG = () => ({
     schoolName: '廍子國小', className: '三年二班', classSize: 30, expected: 30, actual: 29, absentSeats: '08',
-    examTitle: '期中定期評量', examDate: taipeiDate(), soundEnabled: false, showBopomofo: true,
+    examTitle: '期中定期評量', examDate: taipeiDate(), soundEnabled: false, showBopomofo: false,
+    theme: 'lavender',
     subjects: [...COURSE_OPTIONS],
     reminders: {
       examInterval: 5,
       breakInterval: 2,
       examMessages: [...DEFAULT_EXAM_MESSAGES],
-      breakMessages: ['等監考老師點完再離開座位下課', '利用下課準備下個科目與文具用品', '提早上廁所喝水']
+      breakMessages: ['喝水休息上廁所，有時間請複習下一節的考試科目']
     },
     schedule: [
-      { id: uid(), subject: '數學', start: '08:40', end: '09:20' },
-      { id: uid(), subject: '國語', start: '09:30', end: '10:10' },
-      { id: uid(), subject: '自然', start: '10:25', end: '11:05' },
-      { id: uid(), subject: '社會', start: '11:15', end: '11:55' },
-      { id: uid(), subject: '英語', start: '13:30', end: '14:10' },
-      { id: uid(), subject: '健康', start: '14:20', end: '15:00' },
-      { id: uid(), subject: '體育', start: '15:15', end: '15:55' }
+      { id: uid(), subject: '國語', start: '08:40', end: '09:20' },
+      { id: uid(), subject: '英語', start: '09:30', end: '10:10' },
+      { id: uid(), subject: '自然', start: '10:25', end: '11:05' }
     ]
   });
 
@@ -114,6 +113,8 @@
     const reminderData = safe.reminders && typeof safe.reminders === 'object' ? safe.reminders : {};
     const savedExamMessages = normalizeLineList(reminderData.examMessages ?? fallback.reminders.examMessages, fallback.reminders.examMessages);
     const usesOldDefaultExamMessages = LEGACY_EXAM_MESSAGE_SETS.some((oldMessages) => oldMessages.length === savedExamMessages.length && oldMessages.every((message, index) => message === savedExamMessages[index]));
+    const savedBreakMessages = normalizeLineList(reminderData.breakMessages ?? fallback.reminders.breakMessages, fallback.reminders.breakMessages);
+    const usesOldDefaultBreakMessages = LEGACY_BREAK_MESSAGES.length === savedBreakMessages.length && LEGACY_BREAK_MESSAGES.every((message, index) => message === savedBreakMessages[index]);
     return {
       schoolName: '廍子國小',
       className: typeof safe.className === 'string' ? safe.className : fallback.className,
@@ -123,14 +124,15 @@
       absentSeats: typeof safe.absentSeats === 'string' ? safe.absentSeats : fallback.absentSeats,
       examTitle: typeof safe.examTitle === 'string' ? safe.examTitle : fallback.examTitle,
       examDate: typeof safe.examDate === 'string' ? safe.examDate : fallback.examDate,
+      theme: THEME_OPTIONS.includes(safe.theme) ? safe.theme : fallback.theme,
       soundEnabled: safe.soundEnabled === true,
-      showBopomofo: safe.showBopomofo !== false,
+      showBopomofo: typeof safe.showBopomofo === 'boolean' ? safe.showBopomofo : fallback.showBopomofo,
       subjects: normalizeLineList(safe.subjects ?? fallback.subjects, fallback.subjects),
       reminders: {
         examInterval: normalizeReminderInterval(reminderData.examInterval, fallback.reminders.examInterval),
         breakInterval: normalizeReminderInterval(reminderData.breakInterval, fallback.reminders.breakInterval),
         examMessages: usesOldDefaultExamMessages ? [...DEFAULT_EXAM_MESSAGES] : savedExamMessages,
-        breakMessages: normalizeLineList(reminderData.breakMessages ?? fallback.reminders.breakMessages, fallback.reminders.breakMessages)
+        breakMessages: usesOldDefaultBreakMessages ? [...fallback.reminders.breakMessages] : savedBreakMessages
       },
       _isDemo: safe._isDemo === true,
       schedule
@@ -153,6 +155,7 @@
       return false;
     }
   }
+  function applyTheme() { document.documentElement.dataset.theme = config.theme; }
   function announce(message) { $('#liveAnnouncer').textContent = message; }
   function formatMediaTime(seconds) {
     if (!Number.isFinite(seconds) || seconds < 0) return '--:--';
@@ -382,7 +385,8 @@
     return hours > 0 ? `${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(remainder).padStart(2,'0')}` : `${String(minutes).padStart(2,'0')}:${String(remainder).padStart(2,'0')}`;
   }
   function rotatingReminder(status, now = Date.now()) {
-    const phase = status.kind === 'running' ? 'exam' : status.kind === 'upcoming' ? 'break' : '';
+    const isBetweenExams = status.kind === 'upcoming' && status.sorted.some((item) => item.endMinute * 60 <= status.secondsOfDay);
+    const phase = status.kind === 'running' ? 'exam' : isBetweenExams ? 'break' : '';
     if (!phase) { reminderRotation = { phase: '', signature: '', index: 0, nextAt: 0 }; return ''; }
     const messages = phase === 'exam' ? config.reminders.examMessages : config.reminders.breakMessages;
     if (!messages.length) { reminderRotation = { phase, signature: '', index: 0, nextAt: 0 }; return ''; }
@@ -548,6 +552,8 @@
     $('#absentInput').value = config.absentSeats;
     $('#examTitleInput').value = config.examTitle;
     $('#examDateInput').value = config.examDate;
+    $('#themeInput').value = config.theme;
+    applyTheme();
     $('#drawerSoundToggle').checked = config.soundEnabled;
     $('#drawerZhuyinToggle').checked = config.showBopomofo;
     $('#subjectListInput').value = config.subjects.join('\n');
@@ -712,6 +718,7 @@
     showValidation($('#reminderValidation'), reminderErrors, 'error');
     return {
       errors, scheduleErrors, reminderErrors, schedule, className, examTitle, examDate,
+      theme: $('#themeInput').value,
       classSize: classSize.value, expected: expected.value, actual: actual.value,
       subjects: normalizeLineList($('#subjectListInput').value),
       reminders: {
@@ -740,12 +747,14 @@
       ...config,
       className: values.className, classSize: values.classSize, expected: values.expected, actual: values.actual,
       absentSeats: $('#absentInput').value.trim(), examTitle: values.examTitle, examDate: values.examDate,
+      theme: values.theme,
       schedule: values.schedule, subjects: values.subjects, reminders: values.reminders,
       showBopomofo: $('#drawerZhuyinToggle').checked,
       soundEnabled: $('#drawerSoundToggle').checked,
       _isDemo: false
     });
     if (!saveConfig()) return;
+    applyTheme();
     drawerSwitchDirty.showBopomofo = false;
     drawerSwitchDirty.soundEnabled = false;
     if (config.soundEnabled) prepareAudio();
