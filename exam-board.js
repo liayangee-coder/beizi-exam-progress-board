@@ -3,7 +3,7 @@
 
   const STORAGE_KEY = 'buzies-exam-progress-board-v1';
   const COURSE_OPTIONS = ['國語', '數學', '英語', '自然', '社會', '健康', '自修', '作文', '資訊', '體育', '國文', '英文', '生活'];
-  const THEME_STYLE_OPTIONS = ['default', 'warm-journal', 'macaron', 'forest', 'retro-doodle', 'blue', 'sunlight', 'berry-twilight', 'mint-summer', 'milk-tea', 'blackboard'];
+  const THEME_STYLE_OPTIONS = ['default', 'warm-journal', 'macaron', 'forest', 'retro-doodle', 'blue', 'sunlight', 'berry-twilight', 'mint-summer', 'milk-tea', 'blackboard', 'deep-ocean', 'midnight-violet', 'dark-espresso', 'cyber-night'];
   const LEGACY_THEME_STYLES = {
     lavender: 'default', peach: 'warm-journal', mint: 'forest', sky: 'blue',
     default: 'default', 'warm-journal': 'warm-journal', macaron: 'macaron', forest: 'forest', 'retro-doodle': 'retro-doodle', blue: 'blue',

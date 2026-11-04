@@ -356,9 +356,7 @@ body.show-bopomofo .bpmf-font-text{font-family:"Bpmf Huninn Local","Microsoft Jh
 :root[data-theme] .add-schedule-button{border-color:var(--card-border);background:var(--purple-pale);color:var(--purple-dark)}
 :root[data-theme] .switch-row input:checked+.switch-ui{background:var(--primary-accent)}
 :root[data-theme] .save-button{background:linear-gradient(105deg,var(--primary-accent),var(--purple-dark));box-shadow:0 4px 0 rgba(60,45,75,.16)}
-:root[data-theme] :root[data-theme="retro-doodle"] .board-main,:root[data-theme="retro-doodle"] .panel-card,:root[data-theme="retro-doodle"] .current-exam-card,:root[data-theme="retro-doodle"] .schedule-table-wrap{border-style:double;border-width:3px}
-.theme-field-row select{border-color:var(--card-border);border-radius:calc(var(--card-radius) * .45);background:var(--card-bg);color:var(--text-main)}
-
+:root[data-theme] .theme-field-row select{border-color:var(--card-border);border-radius:calc(var(--card-radius) * .45);background:var(--card-bg);color:var(--text-main)}
 :root[data-theme="blackboard"] .schedule-table tr.is-ended td{color:#c3d3cc}
 :root[data-theme="blackboard"] .schedule-status.is-ended{background:#355344;color:#c5f5d4}
 :root[data-theme="blackboard"] .completion-message{background:#2e4b3f;color:#c3f0d6}
@@ -368,8 +366,69 @@ body.show-bopomofo .bpmf-font-text{font-family:"Bpmf Huninn Local","Microsoft Jh
 :root[data-theme="blackboard"] .schedule-edit-row{background:#2d423b;border-color:#527267}
 :root[data-theme="blackboard"] .audio-file-picker input{background:#2d423b;color:#f5f6fa}
 :root[data-theme="blackboard"] .audio-file-picker input::file-selector-button{background:#3a574c;color:#f5f6fa;border-color:#668778}
+
 :root[data-theme="retro-doodle"] .board-main,:root[data-theme="retro-doodle"] .panel-card,:root[data-theme="retro-doodle"] .current-exam-card,:root[data-theme="retro-doodle"] .schedule-table-wrap{border-style:double;border-width:3px}
 .theme-field-row select{width:100%;min-width:0;min-height:39px;padding:7px 10px;border:1.5px solid #cfc2dc;border-radius:9px;background:#fff;color:#38254e;font:inherit;font-size:14px;font-weight:650;cursor:pointer}
 .theme-hint{margin:-2px 0 5px 0}
-@media(max-width:520px){.theme-field-row{grid-template-columns:110px 1fr}:root[data-theme="retro-doodle"] .board-main,:root[data-theme="retro-doodle"] .panel-card,:root[data-theme="retro-doodle"] .current-exam-card,:root[data-theme="retro-doodle"] .schedule-table-wrap{border-style:double;border-width:3px}
+@media(max-width:520px){.theme-field-row{grid-template-columns:110px 1fr}
 .theme-field-row select{min-height:36px;padding:6px 8px;font-size:13px}}
+/* Appended dark palettes: deep ocean, midnight violet, dark espresso, cyber night. */
+:root[data-theme="deep-ocean"]{
+  --bg-color:#071B2D;--card-bg:#102A43;--primary-color:#4DD0C8;--primary-dark:#7CE9DD;--text-color:#EAF6FF;--accent-color:#8AB4F8;
+  --bg-main:var(--bg-color);--primary-accent:var(--primary-color);--text-main:var(--text-color);--card-border:#284A63;--card-radius:20px;
+  --theme-text-soft:#BCD0E1;--theme-muted:#9BB5C9;--theme-accent-strong:var(--primary-dark);--theme-accent-soft:#1D4856;--theme-accent-pale:#153648;
+  --shadow:0 9px 25px rgba(0,0,0,.28);--theme-page-top:#0F2A43;--theme-page-bottom:#041320;--theme-dot:#24465A;
+  --theme-hero-top:rgba(25,58,80,.86);--theme-hero-bottom:rgba(10,36,57,.94);--theme-hero-inner:rgba(22,59,82,.94);
+  --theme-title-bg:rgba(18,45,70,.98);--theme-title-border:#387080;--theme-title-shadow:rgba(0,0,0,.28);
+  --theme-progress-a:#62D9D0;--theme-progress-b:#3E99D4;--theme-expected:#183D3C;--theme-actual:#29443A;--theme-absent:#493448;color-scheme:dark
+}
+:root[data-theme="midnight-violet"]{
+  --bg-color:#15111F;--card-bg:#211A31;--primary-color:#B69CFF;--primary-dark:#D8C5FF;--text-color:#F4EEFF;--accent-color:#E78BBF;
+  --bg-main:var(--bg-color);--primary-accent:var(--primary-color);--text-main:var(--text-color);--card-border:#49385F;--card-radius:22px;
+  --theme-text-soft:#D2C1EA;--theme-muted:#B7A7CA;--theme-accent-strong:var(--primary-dark);--theme-accent-soft:#3B2B52;--theme-accent-pale:#2D223F;
+  --shadow:0 9px 25px rgba(0,0,0,.3);--theme-page-top:#211831;--theme-page-bottom:#100C19;--theme-dot:#403052;
+  --theme-hero-top:rgba(48,34,71,.86);--theme-hero-bottom:rgba(32,23,50,.94);--theme-hero-inner:rgba(56,40,78,.94);
+  --theme-title-bg:rgba(37,27,55,.98);--theme-title-border:#665184;--theme-title-shadow:rgba(0,0,0,.3);
+  --theme-progress-a:#D7B9FF;--theme-progress-b:#8F68D8;--theme-expected:#2D3D3A;--theme-actual:#343E35;--theme-absent:#4A3045;color-scheme:dark
+}
+:root[data-theme="dark-espresso"]{
+  --bg-color:#1D1714;--card-bg:#30241F;--primary-color:#D8AA7D;--primary-dark:#F0C799;--text-color:#FFF2E7;--accent-color:#B77B52;
+  --bg-main:var(--bg-color);--primary-accent:var(--primary-color);--text-main:var(--text-color);--card-border:#61483B;--card-radius:16px;
+  --theme-text-soft:#E3CFC0;--theme-muted:#BBA89B;--theme-accent-strong:var(--primary-dark);--theme-accent-soft:#4B382F;--theme-accent-pale:#3D2E27;
+  --shadow:0 5px 0 rgba(0,0,0,.2),0 10px 24px rgba(0,0,0,.3);--theme-page-top:#34251E;--theme-page-bottom:#17110F;--theme-dot:#5B4031;
+  --theme-hero-top:rgba(67,47,37,.88);--theme-hero-bottom:rgba(43,30,24,.96);--theme-hero-inner:rgba(78,55,42,.94);
+  --theme-title-bg:rgba(49,36,30,.98);--theme-title-border:#806047;--theme-title-shadow:rgba(0,0,0,.28);
+  --theme-progress-a:#E6C08E;--theme-progress-b:#A96843;--theme-expected:#304039;--theme-actual:#3A4034;--theme-absent:#50343A;color-scheme:dark
+}
+:root[data-theme="cyber-night"]{
+  --bg-color:#080D19;--card-bg:#131C2D;--primary-color:#39F5D0;--primary-dark:#A99AFF;--text-color:#EFF5FF;--accent-color:#FF5BBD;
+  --bg-main:var(--bg-color);--primary-accent:var(--primary-color);--text-main:var(--text-color);--card-border:#2C3C5A;--card-radius:14px;
+  --theme-text-soft:#C5D3E9;--theme-muted:#9DACC7;--theme-accent-strong:#B7ABFF;--theme-accent-soft:#243552;--theme-accent-pale:#1B2940;
+  --shadow:0 0 0 1px rgba(57,245,208,.09),0 10px 28px rgba(0,0,0,.38);--theme-page-top:#111A2B;--theme-page-bottom:#050810;--theme-dot:#2A3857;
+  --theme-hero-top:rgba(24,39,62,.9);--theme-hero-bottom:rgba(12,21,37,.96);--theme-hero-inner:rgba(28,48,72,.95);
+  --theme-title-bg:rgba(20,30,48,.98);--theme-title-border:#41617A;--theme-title-shadow:rgba(0,0,0,.35);
+  --theme-progress-a:#39F5D0;--theme-progress-b:#8E79F5;--theme-expected:#183A37;--theme-actual:#273A37;--theme-absent:#44283F;color-scheme:dark
+}
+:root[data-theme="deep-ocean"] .schedule-table td,:root[data-theme="midnight-violet"] .schedule-table td,:root[data-theme="dark-espresso"] .schedule-table td,:root[data-theme="cyber-night"] .schedule-table td{background:var(--card-bg);color:var(--text-main);border-color:var(--card-border)}
+:root[data-theme="deep-ocean"] .schedule-table tr.is-ended td,:root[data-theme="midnight-violet"] .schedule-table tr.is-ended td,:root[data-theme="dark-espresso"] .schedule-table tr.is-ended td,:root[data-theme="cyber-night"] .schedule-table tr.is-ended td{color:var(--theme-muted)}
+:root[data-theme="deep-ocean"] .schedule-status.is-ended,:root[data-theme="midnight-violet"] .schedule-status.is-ended,:root[data-theme="dark-espresso"] .schedule-status.is-ended,:root[data-theme="cyber-night"] .schedule-status.is-ended{background:var(--theme-accent-pale);color:var(--theme-text-soft)}
+:root[data-theme="deep-ocean"] .completion-message,:root[data-theme="midnight-violet"] .completion-message,:root[data-theme="dark-espresso"] .completion-message,:root[data-theme="cyber-night"] .completion-message{background:var(--theme-expected);color:var(--text-main)}
+:root[data-theme="deep-ocean"] .reminder-message,:root[data-theme="midnight-violet"] .reminder-message,:root[data-theme="dark-espresso"] .reminder-message,:root[data-theme="cyber-night"] .reminder-message{border-color:var(--card-border);background:var(--theme-accent-pale);color:var(--text-main)}
+:root[data-theme="deep-ocean"] .independent-note,:root[data-theme="deep-ocean"] .schedule-date,:root[data-theme="deep-ocean"] .board-footer,:root[data-theme="deep-ocean"] .small-note,:root[data-theme="deep-ocean"] .field-hint,:root[data-theme="deep-ocean"] .audio-file-status,
+:root[data-theme="midnight-violet"] .independent-note,:root[data-theme="midnight-violet"] .schedule-date,:root[data-theme="midnight-violet"] .board-footer,:root[data-theme="midnight-violet"] .small-note,:root[data-theme="midnight-violet"] .field-hint,:root[data-theme="midnight-violet"] .audio-file-status,
+:root[data-theme="dark-espresso"] .independent-note,:root[data-theme="dark-espresso"] .schedule-date,:root[data-theme="dark-espresso"] .board-footer,:root[data-theme="dark-espresso"] .small-note,:root[data-theme="dark-espresso"] .field-hint,:root[data-theme="dark-espresso"] .audio-file-status,
+:root[data-theme="cyber-night"] .independent-note,:root[data-theme="cyber-night"] .schedule-date,:root[data-theme="cyber-night"] .board-footer,:root[data-theme="cyber-night"] .small-note,:root[data-theme="cyber-night"] .field-hint,:root[data-theme="cyber-night"] .audio-file-status{color:var(--theme-muted)}
+:root[data-theme="deep-ocean"] .stat-label,:root[data-theme="midnight-violet"] .stat-label,:root[data-theme="dark-espresso"] .stat-label,:root[data-theme="cyber-night"] .stat-label{color:var(--theme-text-soft)}
+:root[data-theme="deep-ocean"] .stat-card strong,:root[data-theme="midnight-violet"] .stat-card strong,:root[data-theme="dark-espresso"] .stat-card strong,:root[data-theme="cyber-night"] .stat-card strong{color:var(--text-main)}
+:root[data-theme="deep-ocean"] .absent-number,:root[data-theme="midnight-violet"] .absent-number,:root[data-theme="dark-espresso"] .absent-number,:root[data-theme="cyber-night"] .absent-number{color:var(--accent-color)}
+:root[data-theme="deep-ocean"] .schedule-empty,:root[data-theme="midnight-violet"] .schedule-empty,:root[data-theme="dark-espresso"] .schedule-empty,:root[data-theme="cyber-night"] .schedule-empty{color:var(--theme-text-soft)}
+:root[data-theme="deep-ocean"] .textarea-field,:root[data-theme="deep-ocean"] .interval-row,:root[data-theme="deep-ocean"] .schedule-edit-top,:root[data-theme="deep-ocean"] .schedule-fields label,:root[data-theme="deep-ocean"] .audio-file-picker,
+:root[data-theme="midnight-violet"] .textarea-field,:root[data-theme="midnight-violet"] .interval-row,:root[data-theme="midnight-violet"] .schedule-edit-top,:root[data-theme="midnight-violet"] .schedule-fields label,:root[data-theme="midnight-violet"] .audio-file-picker,
+:root[data-theme="dark-espresso"] .textarea-field,:root[data-theme="dark-espresso"] .interval-row,:root[data-theme="dark-espresso"] .schedule-edit-top,:root[data-theme="dark-espresso"] .schedule-fields label,:root[data-theme="dark-espresso"] .audio-file-picker,
+:root[data-theme="cyber-night"] .textarea-field,:root[data-theme="cyber-night"] .interval-row,:root[data-theme="cyber-night"] .schedule-edit-top,:root[data-theme="cyber-night"] .schedule-fields label,:root[data-theme="cyber-night"] .audio-file-picker{color:var(--theme-text-soft)}
+:root[data-theme="deep-ocean"] .field-row input,:root[data-theme="deep-ocean"] .field-column input,:root[data-theme="deep-ocean"] .schedule-fields input,:root[data-theme="deep-ocean"] .time-settings-fields input,:root[data-theme="deep-ocean"] .subject-settings-fields select,:root[data-theme="deep-ocean"] .textarea-field textarea,:root[data-theme="deep-ocean"] .interval-row input,:root[data-theme="deep-ocean"] .theme-field-row select,
+:root[data-theme="midnight-violet"] .field-row input,:root[data-theme="midnight-violet"] .field-column input,:root[data-theme="midnight-violet"] .schedule-fields input,:root[data-theme="midnight-violet"] .time-settings-fields input,:root[data-theme="midnight-violet"] .subject-settings-fields select,:root[data-theme="midnight-violet"] .textarea-field textarea,:root[data-theme="midnight-violet"] .interval-row input,:root[data-theme="midnight-violet"] .theme-field-row select,
+:root[data-theme="dark-espresso"] .field-row input,:root[data-theme="dark-espresso"] .field-column input,:root[data-theme="dark-espresso"] .schedule-fields input,:root[data-theme="dark-espresso"] .time-settings-fields input,:root[data-theme="dark-espresso"] .subject-settings-fields select,:root[data-theme="dark-espresso"] .textarea-field textarea,:root[data-theme="dark-espresso"] .interval-row input,:root[data-theme="dark-espresso"] .theme-field-row select,
+:root[data-theme="cyber-night"] .field-row input,:root[data-theme="cyber-night"] .field-column input,:root[data-theme="cyber-night"] .schedule-fields input,:root[data-theme="cyber-night"] .time-settings-fields input,:root[data-theme="cyber-night"] .subject-settings-fields select,:root[data-theme="cyber-night"] .textarea-field textarea,:root[data-theme="cyber-night"] .interval-row input,:root[data-theme="cyber-night"] .theme-field-row select{background:#F5F6FA;color:#263834;border-color:var(--card-border)}
+:root[data-theme="deep-ocean"] .schedule-edit-row,:root[data-theme="midnight-violet"] .schedule-edit-row,:root[data-theme="dark-espresso"] .schedule-edit-row,:root[data-theme="cyber-night"] .schedule-edit-row{background:var(--theme-accent-pale);border-color:var(--card-border)}
+:root[data-theme="deep-ocean"] .audio-file-picker input,:root[data-theme="midnight-violet"] .audio-file-picker input,:root[data-theme="dark-espresso"] .audio-file-picker input,:root[data-theme="cyber-night"] .audio-file-picker input{background:var(--theme-accent-pale);color:var(--text-main);border-color:var(--card-border)}
