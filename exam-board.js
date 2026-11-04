@@ -101,13 +101,24 @@
     return Object.fromEntries(parts.filter((part) => part.type !== 'literal').map((part) => [part.type, part.value]));
   }
   function taipeiDate(date = new Date()) { const p = taipeiParts(date); return `${p.year}-${p.month}-${p.day}`; }
+  function isLegacyDefaultSchedule(schedule) {
+    if (!Array.isArray(schedule) || schedule.length !== LEGACY_DEFAULT_SCHEDULE.length) return false;
+    const matchesPreviousRows = LEGACY_DEFAULT_SCHEDULE.slice(0, -1).every(([subject, start, end], index) => schedule[index]?.subject === subject && schedule[index]?.start === start && schedule[index]?.end === end);
+    const last = schedule[LEGACY_DEFAULT_SCHEDULE.length - 1];
+    return matchesPreviousRows && last?.start === '15:15' && last?.end === '15:55' && COURSE_OPTIONS.includes(last?.subject);
+  }
   function loadConfig() {
     const fallback = DEFAULT_CONFIG();
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (!stored) return fallback;
       const parsed = JSON.parse(stored);
-      return normalizeConfig(parsed, fallback);
+      const migrateLegacySchedule = parsed && typeof parsed === 'object' && !Array.isArray(parsed) && isLegacyDefaultSchedule(parsed.schedule);
+      const normalized = normalizeConfig(parsed, fallback);
+      if (migrateLegacySchedule) {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...parsed, schedule: normalized.schedule })); } catch (error) { /* Keep the normalized three-course view even if storage is unavailable. */ }
+      }
+      return normalized;
     } catch (error) {
       return fallback;
     }
@@ -115,11 +126,7 @@
   function normalizeConfig(value, fallback = DEFAULT_CONFIG()) {
     const safe = value && typeof value === 'object' ? value : {};
     const savedSchedule = Array.isArray(safe.schedule) ? safe.schedule.filter((item) => item && typeof item === 'object').map((item) => ({ id: String(item.id || uid()), subject: String(item.subject ?? ''), start: String(item.start ?? ''), end: String(item.end ?? '') })) : fallback.schedule;
-    const isLegacyDefaultSchedule = savedSchedule.length === LEGACY_DEFAULT_SCHEDULE.length
-      && LEGACY_DEFAULT_SCHEDULE.slice(0, -1).every(([subject, start, end], index) => savedSchedule[index].subject === subject && savedSchedule[index].start === start && savedSchedule[index].end === end)
-      && savedSchedule[LEGACY_DEFAULT_SCHEDULE.length - 1].start === '15:15' && savedSchedule[LEGACY_DEFAULT_SCHEDULE.length - 1].end === '15:55'
-      && COURSE_OPTIONS.includes(savedSchedule[LEGACY_DEFAULT_SCHEDULE.length - 1].subject);
-    const schedule = isLegacyDefaultSchedule ? fallback.schedule : savedSchedule;
+    const schedule = isLegacyDefaultSchedule(savedSchedule) ? fallback.schedule : savedSchedule;
     const reminderData = safe.reminders && typeof safe.reminders === 'object' ? safe.reminders : {};
     const savedExamMessages = normalizeLineList(reminderData.examMessages ?? fallback.reminders.examMessages, fallback.reminders.examMessages);
     const usesOldDefaultExamMessages = LEGACY_EXAM_MESSAGE_SETS.some((oldMessages) => oldMessages.length === savedExamMessages.length && oldMessages.every((message, index) => message === savedExamMessages[index]));
