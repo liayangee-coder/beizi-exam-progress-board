@@ -3,8 +3,11 @@
 
   const STORAGE_KEY = 'buzies-exam-progress-board-v1';
   const COURSE_OPTIONS = ['國語', '數學', '英語', '自然', '社會', '健康', '自修', '作文', '資訊', '體育', '國文', '英文', '生活'];
-  const THEME_STYLE_OPTIONS = ['warm-journal', 'macaron', 'forest', 'retro-doodle', 'default', 'blue'];
-  const LEGACY_THEME_STYLES = { lavender: 'default', peach: 'warm-journal', mint: 'forest', sky: 'blue' };
+  const THEME_STYLE_OPTIONS = ['sunlight', 'berry-twilight', 'mint-summer', 'milk-tea', 'blackboard', 'blue'];
+  const LEGACY_THEME_STYLES = {
+    default: 'berry-twilight', lavender: 'berry-twilight', peach: 'sunlight', 'warm-journal': 'sunlight',
+    macaron: 'berry-twilight', mint: 'mint-summer', forest: 'mint-summer', 'retro-doodle': 'milk-tea', sky: 'blue'
+  };
   const LEGACY_DEFAULT_SCHEDULE = [
     ['數學', '08:40', '09:20'], ['國語', '09:30', '10:10'], ['自然', '10:25', '11:05'],
     ['社會', '11:15', '11:55'], ['英語', '13:30', '14:10'], ['健康', '14:20', '15:00'], ['體育', '15:15', '15:55']
@@ -56,9 +59,9 @@
   };
 
   const DEFAULT_CONFIG = () => ({
-    schoolName: '廍子國小', className: '三年二班', classSize: 30, expected: 30, actual: 29, absentSeats: '08',
+    schoolName: '廍子國小', className: '三年二班', classSize: 27, expected: 27, actual: 27, absentSeats: '',
     examTitle: '期中定期評量', examDate: taipeiDate(), soundEnabled: false, showBopomofo: false,
-    themeStyle: 'default',
+    themeStyle: 'berry-twilight',
     subjects: [...COURSE_OPTIONS],
     reminders: {
       examInterval: 5,
@@ -141,7 +144,7 @@
       absentSeats: typeof safe.absentSeats === 'string' ? safe.absentSeats : fallback.absentSeats,
       examTitle: typeof safe.examTitle === 'string' ? safe.examTitle : fallback.examTitle,
       examDate: typeof safe.examDate === 'string' ? safe.examDate : fallback.examDate,
-      themeStyle: THEME_STYLE_OPTIONS.includes(safe.themeStyle) ? safe.themeStyle : (LEGACY_THEME_STYLES[safe.theme] || fallback.themeStyle),
+      themeStyle: THEME_STYLE_OPTIONS.includes(safe.themeStyle) ? safe.themeStyle : (LEGACY_THEME_STYLES[safe.themeStyle] || LEGACY_THEME_STYLES[safe.theme] || fallback.themeStyle),
       soundEnabled: safe.soundEnabled === true,
       showBopomofo: typeof safe.showBopomofo === 'boolean' ? safe.showBopomofo : fallback.showBopomofo,
       subjects: normalizeLineList(safe.subjects ?? fallback.subjects, fallback.subjects),
