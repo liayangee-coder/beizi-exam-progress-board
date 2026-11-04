@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4edff">
+  <meta name="description" content="廍子國小段考進度看板，提供教師自訂班級、出缺席與考程，適合教室大螢幕使用。">
+  <title>段考進度看板｜廍子國小</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="exam-board.css">
+  <script src="exam-board.js" defer></script>
+</head>
+<body>
+  <div class="exam-app" id="examApp">
+    <main class="board-main" id="boardMain">
+      <header class="board-header">
+        <div class="brand-lockup">
+          <span class="brand-icon" aria-hidden="true">📖</span>
+          <div>
+            <p class="school-label" id="schoolLabel">廍子國小</p>
+            <h1>段考進度看板</h1>
+          </div>
+        </div>
+        <div class="class-chip"><span aria-hidden="true">✎</span><span id="classNameDisplay">三年二班</span></div>
+        <div class="header-controls">
+          <div class="live-date"><strong id="clockDisplay">--:--:--</strong><span id="dateDisplay">載入日期中</span></div>
+          <button class="tool-button zhuyin-toggle" id="zhuyinToggle" type="button" aria-pressed="true" title="切換注音顯示"><span class="bpmf-icon">ㄅ</span><span>注音</span><span class="toggle-state" id="zhuyinState">開</span></button>
+          <button class="tool-button sound-toggle" id="soundToggle" type="button" aria-pressed="false" title="啟用或關閉考試提示音"><span id="soundIcon" aria-hidden="true">🔕</span><span id="soundState">靜音</span></button>
+          <button class="tool-button fullscreen-button" id="fullscreenButton" type="button" title="全螢幕依螢幕比例自動調整"><span aria-hidden="true">⛶</span><span>全螢幕</span></button>
+          <button class="gear-button" id="settingsOpen" type="button" aria-label="開啟教師手動設定" title="教師手動設定">⚙</button>
+        </div>
+      </header>
+
+      <section class="hero-banner" aria-label="評量名稱">
+        <div class="hero-decoration pencils" aria-hidden="true">✏️</div>
+        <div class="student-portrait student-portrait--left" aria-hidden="true"><img src="assets/exam-board/students.png" alt=""></div>
+        <div class="student-portrait student-portrait--right" aria-hidden="true"><img src="assets/exam-board/students.png" alt=""></div>
+        <div class="hero-title-wrap">
+          <p class="hero-kicker" id="heroClassLabel">廍子國小・三年二班</p>
+          <h2 id="examTitleDisplay">期中定期評量</h2>
+          <p class="hero-date" id="examDateDisplay">示範資料</p>
+        </div>
+        <div class="hero-decoration books" aria-hidden="true">📚</div>
+      </section>
+
+      <section class="current-exam-card" aria-label="目前考試進度">
+        <div class="current-exam-heading">
+          <div class="current-heading-side current-heading-side--left">
+            <span class="current-tag">目前考試</span>
+            <span class="current-subject-icon" aria-hidden="true">📖</span>
+          </div>
+          <div class="subject-block">
+            <h2 id="currentSubject">載入中</h2>
+          </div>
+          <div class="current-heading-side current-heading-side--right">
+            <div class="current-time-pill"><span aria-hidden="true">◷</span><strong id="currentTimeRange">--:-- – --:--</strong></div>
+          </div>
+        </div>
+        <div class="status-line">
+          <span class="state-dot" id="stateDot"></span>
+          <span id="examStatus">準備中</span>
+          <span class="status-detail" id="statusDetail"></span>
+        </div>
+        <div class="progress-track" role="progressbar" aria-label="本節考試進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressTrack">
+          <div class="progress-fill" id="progressFill"></div>
+          <span class="progress-label" id="progressLabel">等待考試</span>
+        </div>
+        <div class="progress-times"><span id="progressStart">--:--</span><strong id="progressPercent">0%</strong><span id="progressEnd">--:--</span></div>
+        <p class="completion-message" id="completionMessage" hidden></p>
+        <p class="reminder-message" id="reminderMessage" aria-live="polite" hidden></p>
+      </section>
+
+      <div class="dashboard-grid">
+        <section class="attendance-panel panel-card" aria-labelledby="attendanceHeading">
+          <div class="section-heading"><span class="heading-icon" aria-hidden="true">♟</span><h2 id="attendanceHeading">學生出缺席統計</h2></div>
+          <div class="attendance-stats">
+            <article class="stat-card class-stat"><span class="stat-label">班級人數</span><strong id="classCountDisplay">30<span>人</span></strong></article>
+            <article class="stat-card expected-stat"><span class="stat-label">應到</span><strong id="expectedCountDisplay">30<span>人</span></strong></article>
+            <article class="stat-card actual-stat"><span class="stat-label">實到</span><strong id="actualCountDisplay">29<span>人</span></strong></article>
+            <article class="stat-card absent-stat"><span class="stat-label">缺席座號</span><strong class="absent-number" id="absentSeatsDisplay">08</strong></article>
+          </div>
+          <p class="independent-note" id="independentNote">數字由教師分別輸入；座號不參與人數計算。</p>
+        </section>
+
+        <section class="schedule-panel panel-card" aria-labelledby="scheduleHeading">
+          <div class="section-heading"><span class="heading-icon" aria-hidden="true">▦</span><h2 id="scheduleHeading">今日考試流程</h2><span class="schedule-date" id="scheduleDate"></span></div>
+          <div class="schedule-empty" id="scheduleEmpty" hidden>
+            <span aria-hidden="true">📝</span><p>還沒有考程，先新增今天的考試科目吧！</p>
+            <button class="soft-button" id="emptySettingsButton" type="button">前往設定</button>
+          </div>
+          <div class="schedule-table-wrap" id="scheduleTableWrap">
+            <table class="schedule-table">
+              <thead><tr><th scope="col">節次</th><th scope="col">科目</th><th scope="col">考試時間</th><th scope="col">狀態</th></tr></thead>
+              <tbody id="scheduleRows"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <footer class="board-footer"><span>⏰ 時間依臺灣時區即時更新</span><span>設計 by 楊依依老師｜Emily AI Studio</span></footer>
+      <div class="sound-test-row"><button class="text-button" id="testSoundButton" type="button">♫ 測試提示音</button><button class="audio-main-button" id="studentAudioButton" type="button" aria-pressed="false" hidden>▶ 播放英語聽力</button><div class="audio-progress" id="audioProgress" hidden><span id="audioElapsed">0:00</span><input class="audio-seek" id="audioSeek" type="range" min="0" max="1000" step="1" value="0" aria-label="英語聽力播放進度，可拖曳調整位置" aria-valuetext="0:00 / --:--" disabled><span id="audioDuration">--:--</span></div><span class="small-note">提示音預設關閉，需由教師主動啟用</span></div>
+    </main>
+
+    <audio id="examAudio" preload="metadata" hidden></audio>
+
+    <div class="settings-backdrop" id="settingsBackdrop" hidden></div>
+    <aside class="settings-drawer" id="settingsDrawer" aria-labelledby="settingsHeading" aria-hidden="true" inert>
+      <div class="drawer-header"><div><p class="drawer-kicker">TEACHER CONTROLS</p><h2 id="settingsHeading">⚙ 手動設定</h2></div><button class="drawer-close" id="settingsClose" type="button" aria-label="關閉設定">×</button></div>
+      <p class="drawer-intro">以下資訊皆為獨立手動輸入，可依各班實際情況自由調整。</p>
+      <form id="settingsForm" novalidate>
+        <section class="setting-section" aria-labelledby="classSettingsHeading">
+          <h3 id="classSettingsHeading"><span aria-hidden="true">♟</span> 班級與出缺席設定 <small>（各欄獨立輸入）</small></h3>
+          <label class="field-row"><span>班級名稱</span><input id="classNameInput" name="className" type="text" maxlength="32" autocomplete="off" placeholder="例如：三年二班"></label>
+          <div class="counter-grid">
+            <label class="field-column"><span>班級人數</span><input id="classSizeInput" name="classSize" type="number" min="0" step="1" inputmode="numeric"></label>
+            <label class="field-column"><span>應到人數</span><input id="expectedInput" name="expected" type="number" min="0" step="1" inputmode="numeric"></label>
+            <label class="field-column"><span>實到人數</span><input id="actualInput" name="actual" type="number" min="0" step="1" inputmode="numeric"></label>
+          </div>
+          <label class="field-row"><span>缺席座號</span><input id="absentInput" name="absentSeats" type="text" maxlength="120" autocomplete="off" placeholder="例如：08、12"></label>
+          <p class="field-hint">缺席座號不會自動計算人數，也不會改動上方任何人數欄位。</p>
+          <div class="validation-message" id="attendanceValidation" role="status" hidden></div>
+        </section>
+
+        <section class="setting-section" aria-labelledby="assessmentSettingsHeading">
+          <h3 id="assessmentSettingsHeading"><span aria-hidden="true">▣</span> 評量與考程設定</h3>
+          <label class="field-row"><span>評量名稱</span><input id="examTitleInput" name="examTitle" type="text" maxlength="40" placeholder="例如：期中定期評量"></label>
+          <label class="field-row"><span>評量日期</span><input id="examDateInput" name="examDate" type="date"></label>
+          <div class="schedule-editor-heading"><strong>1. 考試時間設定</strong><span>每節各自設定開始與結束時間</span></div>
+          <div class="time-settings-editor" id="timeSettingsEditor"></div>
+          <div class="schedule-editor-heading"><strong>2. 科目列表設定（一行一個）</strong><span>新增科目後，可在下方節次選用</span></div>
+          <label class="textarea-field"><span>科目清單</span><textarea id="subjectListInput" name="subjects" rows="6" spellcheck="false" aria-label="科目列表，每行一個"></textarea></label>
+          <p class="field-hint">修改清單後，請在下方重新選擇各節科目；清單外的既有科目會保留。</p>
+          <div class="schedule-editor-heading"><strong>3. 各節科目安排</strong><span>可新增、刪除及調整順序</span></div>
+          <div class="schedule-editor" id="scheduleEditor"></div>
+          <button class="add-schedule-button" id="addScheduleButton" type="button">＋ 新增節次</button>
+          <div class="validation-message error-message" id="scheduleValidation" role="alert" hidden></div>
+          <div class="schedule-editor-heading reminder-section-heading"><strong>4. 輪播提醒文字（一行一句）</strong><span>顯示於學生端看板</span></div>
+          <div class="reminder-settings-group">
+            <label class="interval-row" for="examReminderIntervalInput"><span>考試中提醒間隔</span><span><input id="examReminderIntervalInput" type="number" min="1" max="120" step="1" inputmode="numeric"> 分鐘</span></label>
+            <label class="textarea-field"><span>考試中提醒（每行一句）</span><textarea id="examReminderInput" name="examReminders" rows="5" maxlength="1200" placeholder="每行輸入一句提醒"></textarea></label>
+          </div>
+          <div class="reminder-settings-group">
+            <label class="interval-row" for="breakReminderIntervalInput"><span>下課／準備中提醒間隔</span><span><input id="breakReminderIntervalInput" type="number" min="1" max="120" step="1" inputmode="numeric"> 分鐘</span></label>
+            <label class="textarea-field"><span>下課／準備中提醒（每行一句）</span><textarea id="breakReminderInput" name="breakReminders" rows="4" maxlength="1200" placeholder="每行輸入一句提醒"></textarea></label>
+          </div>
+          <div class="validation-message error-message" id="reminderValidation" role="alert" hidden></div>
+        </section>
+
+        <section class="setting-section sound-settings" aria-label="看板顯示設定">
+          <label class="switch-row"><span><strong>看板國字加注音</strong><small>使用對齊的注音標示</small></span><input id="drawerZhuyinToggle" type="checkbox"><span class="switch-ui" aria-hidden="true"></span></label>
+          <label class="switch-row"><span><strong>開始／結束提示音</strong><small>預設關閉，啟用後播放柔和音效</small></span><input id="drawerSoundToggle" type="checkbox"><span class="switch-ui" aria-hidden="true"></span></label>
+        </section>
+
+        <section class="setting-section audio-settings" aria-labelledby="audioSettingsHeading">
+          <h3 id="audioSettingsHeading"><span aria-hidden="true">♫</span> 英語聽力音檔</h3>
+          <label class="audio-file-picker" for="examAudioFile"><span>附加本機 MP3 音檔</span><input id="examAudioFile" type="file" accept=".mp3,audio/mpeg"></label>
+          <p class="audio-file-status" id="audioFileStatus" role="status" aria-live="polite">尚未選取音檔。</p>
+          <div class="audio-control-row"><button class="audio-control-button" id="drawerAudioButton" type="button" disabled>▶ 預聽音檔</button><button class="audio-clear-button" id="clearAudioButton" type="button" disabled>清除音檔</button></div>
+          <p class="field-hint">音檔由瀏覽器暫時讀取，不寫入設定或上傳到 Netlify，因此不會增加網站檔案或播放流量；關閉或重新整理後需重新選取。</p>
+        </section>
+
+        <p class="storage-note">資料只保存在目前瀏覽器的 localStorage；換電腦或瀏覽器不會自動同步給其他老師。此看板不使用學生姓名或個資。</p>
+        <div class="drawer-actions"><button class="reset-button" id="resetButton" type="button">↺ 重設預設值</button><button class="save-button" type="submit">✓ 儲存設定</button></div>
+      </form>
+      <p class="designer-credit">設計 by 楊依依老師｜Emily AI Studio</p>
+    </aside>
+  </div>
+  <div class="live-announcer" id="liveAnnouncer" aria-live="polite" aria-atomic="true"></div>
+  <dialog class="confirm-dialog" id="resetDialog"><form method="dialog"><h2>重設段考看板？</h2><p>這會把本瀏覽器中的段考設定恢復為示範預設值。</p><div class="dialog-actions"><button class="soft-button" value="cancel">取消</button><button class="reset-confirm" value="confirm">重設設定</button></div></form></dialog>
+</body>
+</html>
