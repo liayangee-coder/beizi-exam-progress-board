@@ -4,7 +4,7 @@ Emily AI Studio 製作的靜態段考看板 GitHub Pages 專案。
 
 ## 使用方式
 
-部署後開啟 GitHub Pages 網址即可使用。教師設定保存在目前瀏覽器的 localStorage，不會同步到其他裝置。英語聽力 MP3 只透過本機檔案選取，在本次頁面暫存播放；不會上傳到網站，也不會保存，重新整理後需重新選取。
+部署後開啟 GitHub Pages 網址即可使用。教師設定保存在目前瀏覽器的 localStorage，不會同步到其他裝置。英語聽力 MP3 只透過本機檔案選取，在目前頁面暫存播放；不會上傳到 GitHub 或寫入 localStorage，因此播放不會增加 GitHub Pages 的音檔流量。關閉頁面或重新整理後需重新選取。
 
 ## 本機預覽
 
