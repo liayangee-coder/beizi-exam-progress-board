@@ -7,8 +7,8 @@
   <meta name="description" content="廍子國小段考進度看板，提供教師自訂班級、出缺席與考程，適合教室大螢幕使用。">
   <title>段考進度看板｜廍子國小</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="exam-board.css">
-  <script src="exam-board.js" defer></script>
+  <link rel="stylesheet" href="exam-board.css?v=theme-blue-20261104">
+  <script src="exam-board.js?v=theme-blue-20261104" defer></script>
 </head>
 <body>
   <div class="exam-app" id="examApp">
@@ -132,7 +132,8 @@
           <p class="field-hint">修改清單後，請在下方重新選擇各節科目；清單外的既有科目會保留。</p>
           <div class="schedule-editor-heading"><strong>3. 各節科目安排</strong><span>可新增、刪除及調整順序</span></div>
           <div class="schedule-editor" id="scheduleEditor"></div>
-          <button class="add-schedule-button" id="addScheduleButton" type="button">＋ 新增節次</button>
+          <button class="add-schedule-button" id="addScheduleButton" type="button">＋ 新增科目／節次</button>
+          <p class="field-hint schedule-add-hint">預設三科；需要更多考科時，按此新增一列，再選擇科目並設定時間。</p>
           <div class="validation-message error-message" id="scheduleValidation" role="alert" hidden></div>
           <div class="schedule-editor-heading reminder-section-heading"><strong>4. 輪播提醒文字（一行一句）</strong><span>顯示於學生端看板</span></div>
           <div class="reminder-settings-group">
@@ -149,8 +150,8 @@
         <section class="setting-section sound-settings" aria-label="看板顯示設定">
           <label class="switch-row"><span><strong>看板國字加注音</strong><small>使用對齊的注音標示</small></span><input id="drawerZhuyinToggle" type="checkbox"><span class="switch-ui" aria-hidden="true"></span></label>
           <label class="switch-row"><span><strong>開始／結束提示音</strong><small>預設關閉，啟用後播放柔和音效</small></span><input id="drawerSoundToggle" type="checkbox"><span class="switch-ui" aria-hidden="true"></span></label>
-          <label class="field-row theme-field-row" for="themeStyleInput"><span>主題風格與配色</span><select id="themeStyleInput" name="themeStyle"><option value="default">預設薰衣草紫</option><option value="warm-journal">溫暖手感風（暖米色調）</option><option value="macaron">繽紛馬卡龍（粉彩甜點）</option><option value="forest">森林護眼風（自然森系）</option><option value="retro-doodle">復古繪本風（微立體邊框）</option></select></label>
-          <p class="field-hint theme-hint">儲存設定後套用，並保存在目前瀏覽器。</p>
+          <label class="field-row theme-field-row" for="themeStyleInput"><span>主題風格與配色</span><select id="themeStyleInput" name="themeStyle"><option value="default">預設薰衣草紫</option><option value="warm-journal">溫暖手感風（暖米色調）</option><option value="macaron">繽紛馬卡龍（粉彩甜點）</option><option value="forest">森林護眼風（自然森系）</option><option value="retro-doodle">復古繪本風（微立體邊框）</option><option value="blue">清新晴空藍</option></select></label>
+          <p class="field-hint theme-hint">選取後立即預覽；儲存後保存在目前瀏覽器。</p>
         </section>
 
         <section class="setting-section audio-settings" aria-labelledby="audioSettingsHeading">

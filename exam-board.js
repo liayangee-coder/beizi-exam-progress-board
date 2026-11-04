@@ -3,8 +3,8 @@
 
   const STORAGE_KEY = 'buzies-exam-progress-board-v1';
   const COURSE_OPTIONS = ['國語', '數學', '英語', '自然', '社會', '健康', '自修', '作文', '資訊', '體育', '國文', '英文', '生活'];
-  const THEME_STYLE_OPTIONS = ['warm-journal', 'macaron', 'forest', 'retro-doodle', 'default'];
-  const LEGACY_THEME_STYLES = { lavender: 'default', peach: 'warm-journal', mint: 'forest', sky: 'macaron' };
+  const THEME_STYLE_OPTIONS = ['warm-journal', 'macaron', 'forest', 'retro-doodle', 'default', 'blue'];
+  const LEGACY_THEME_STYLES = { lavender: 'default', peach: 'warm-journal', mint: 'forest', sky: 'blue' };
   const LEGACY_DEFAULT_SCHEDULE = [
     ['數學', '08:40', '09:20'], ['國語', '09:30', '10:10'], ['自然', '10:25', '11:05'],
     ['社會', '11:15', '11:55'], ['英語', '13:30', '14:10'], ['健康', '14:20', '15:00'], ['體育', '15:15', '15:55']
@@ -115,7 +115,10 @@
   function normalizeConfig(value, fallback = DEFAULT_CONFIG()) {
     const safe = value && typeof value === 'object' ? value : {};
     const savedSchedule = Array.isArray(safe.schedule) ? safe.schedule.filter((item) => item && typeof item === 'object').map((item) => ({ id: String(item.id || uid()), subject: String(item.subject ?? ''), start: String(item.start ?? ''), end: String(item.end ?? '') })) : fallback.schedule;
-    const isLegacyDefaultSchedule = savedSchedule.length === LEGACY_DEFAULT_SCHEDULE.length && LEGACY_DEFAULT_SCHEDULE.every(([subject, start, end], index) => savedSchedule[index].subject === subject && savedSchedule[index].start === start && savedSchedule[index].end === end);
+    const isLegacyDefaultSchedule = savedSchedule.length === LEGACY_DEFAULT_SCHEDULE.length
+      && LEGACY_DEFAULT_SCHEDULE.slice(0, -1).every(([subject, start, end], index) => savedSchedule[index].subject === subject && savedSchedule[index].start === start && savedSchedule[index].end === end)
+      && savedSchedule[LEGACY_DEFAULT_SCHEDULE.length - 1].start === '15:15' && savedSchedule[LEGACY_DEFAULT_SCHEDULE.length - 1].end === '15:55'
+      && COURSE_OPTIONS.includes(savedSchedule[LEGACY_DEFAULT_SCHEDULE.length - 1].subject);
     const schedule = isLegacyDefaultSchedule ? fallback.schedule : savedSchedule;
     const reminderData = safe.reminders && typeof safe.reminders === 'object' ? safe.reminders : {};
     const savedExamMessages = normalizeLineList(reminderData.examMessages ?? fallback.reminders.examMessages, fallback.reminders.examMessages);
@@ -645,6 +648,7 @@
     $('#settingsClose').focus({ preventScroll: true });
   }
   function closeDrawer() {
+    applyTheme();
     drawer.classList.remove('is-open'); drawer.setAttribute('aria-hidden', 'true'); drawer.inert = true;
     app.classList.add('drawer-closed');
     backdrop.hidden = true; $('#settingsOpen').setAttribute('aria-expanded', 'false');
@@ -845,6 +849,10 @@
     $('#settingsOpen').addEventListener('click', openDrawer);
     $('#emptySettingsButton').addEventListener('click', openDrawer);
     $('#settingsClose').addEventListener('click', closeDrawer);
+    $('#themeStyleInput').addEventListener('change', (event) => {
+      const selectedTheme = event.currentTarget.value;
+      if (THEME_STYLE_OPTIONS.includes(selectedTheme)) document.documentElement.dataset.theme = selectedTheme;
+    });
     backdrop.addEventListener('click', closeDrawer);
     const isEditableTarget = (target) => {
       const element = target instanceof Element ? target : target?.parentElement;
