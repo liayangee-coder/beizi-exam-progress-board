@@ -242,7 +242,7 @@ body.show-bopomofo .bpmf-font-text{font-family:"Bpmf Huninn Local","Microsoft Jh
   .current-heading-side .current-time-pill span{font-size:16px}
   .current-heading-side .current-time-pill strong{font-size:12px}
 }
-@media(max-height:720px) and (min-width:1121px){
+@media(max-height:850px) and (min-width:1121px){
   .exam-app,.exam-app:fullscreen{height:auto;min-height:100svh;overflow:auto;align-items:start}
   .board-main,.exam-app:fullscreen .board-main{height:auto;min-height:calc(100svh - 16px);grid-template-rows:repeat(6,auto);overflow:visible}
 }
