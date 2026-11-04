@@ -444,3 +444,41 @@ body.show-bopomofo .bpmf-font-text{font-family:"Bpmf Huninn Local","Microsoft Jh
 .current-time-pill strong{font-size:clamp(17px,1.6vw,27px)}
 @media(max-width:800px){.subject-digital-clock{font-size:clamp(48px,7vw,76px)}.current-time-pill strong{font-size:clamp(15px,2.8vw,22px)}}
 @media(max-width:520px){.subject-block{flex-wrap:wrap}.subject-digital-clock{font-size:clamp(40px,12vw,62px)}.current-time-pill strong{font-size:clamp(14px,4vw,18px)}}
+
+/* Projection readability: pair the live clock with the subject heading and enlarge lower panels. */
+#subjectClockDisplay{font-size:clamp(48px,5vw,84px);color:#087f86}
+.current-time-pill strong{font-size:clamp(16px,1.4vw,24px)}
+.schedule-panel .section-heading h2{font-size:clamp(20px,1.5vw,27px)}
+.schedule-panel .schedule-date{font-size:clamp(13px,.95vw,16px)}
+.schedule-panel .schedule-table{font-size:clamp(16px,1.15vw,20px)}
+.schedule-panel .schedule-table th{font-size:clamp(14px,.95vw,17px)}
+.schedule-panel .schedule-status{font-size:clamp(13px,.85vw,15px)}
+.attendance-panel .section-heading h2{font-size:clamp(20px,1.5vw,27px)}
+.attendance-panel .stat-label{font-size:clamp(16px,1.2vw,20px)}
+.attendance-panel .stat-card strong{font-size:clamp(42px,3.5vw,60px)}
+.attendance-panel .stat-card strong span{font-size:.46em}
+.attendance-panel .independent-note{font-size:clamp(12px,.82vw,14px)}
+@media(max-width:800px){
+  #subjectClockDisplay{font-size:clamp(48px,7vw,76px)}
+  .current-time-pill strong{font-size:clamp(14px,2.3vw,20px)}
+  .schedule-panel .schedule-table{font-size:clamp(16px,2.2vw,20px)}
+  .schedule-panel .schedule-table th{font-size:clamp(14px,1.8vw,17px)}
+  .schedule-panel .schedule-status{font-size:clamp(13px,1.7vw,15px)}
+  .attendance-panel .stat-label{font-size:clamp(16px,2.8vw,22px)}
+  .attendance-panel .stat-card strong{font-size:clamp(42px,8vw,64px)}
+  .attendance-panel .independent-note{font-size:clamp(12px,1.7vw,14px)}
+}
+@media(max-width:520px){
+  #subjectClockDisplay{font-size:clamp(40px,12vw,62px)}
+  .current-time-pill strong{font-size:clamp(13px,3.5vw,17px)}
+  .schedule-panel .section-heading h2,.attendance-panel .section-heading h2{font-size:clamp(18px,4.8vw,23px)}
+  .schedule-panel .schedule-date{font-size:12px}
+  .schedule-panel .schedule-table{font-size:clamp(14px,3.7vw,17px)}
+  .schedule-panel .schedule-table th{font-size:clamp(13px,3.3vw,15px)}
+  .schedule-panel .schedule-status{font-size:12px}
+  .attendance-panel .stat-label{font-size:clamp(14px,3.8vw,17px)}
+  .attendance-panel .stat-card strong{font-size:clamp(36px,12vw,48px)}
+  .attendance-panel .independent-note{font-size:11px}
+}
+@media(prefers-color-scheme:dark){:root[data-theme="blackboard"] #subjectClockDisplay{color:#70e1d4}}
+@media(max-height:850px) and (min-width:1121px){#subjectClockDisplay{font-size:clamp(42px,4vw,68px)}}
