@@ -3,10 +3,11 @@
 
   const STORAGE_KEY = 'buzies-exam-progress-board-v1';
   const COURSE_OPTIONS = ['國語', '數學', '英語', '自然', '社會', '健康', '自修', '作文', '資訊', '體育', '國文', '英文', '生活'];
-  const THEME_STYLE_OPTIONS = ['sunlight', 'berry-twilight', 'mint-summer', 'milk-tea', 'blackboard', 'blue'];
+  const THEME_STYLE_OPTIONS = ['default', 'warm-journal', 'macaron', 'forest', 'retro-doodle', 'blue', 'sunlight', 'berry-twilight', 'mint-summer', 'milk-tea', 'blackboard'];
   const LEGACY_THEME_STYLES = {
-    default: 'berry-twilight', lavender: 'berry-twilight', peach: 'sunlight', 'warm-journal': 'sunlight',
-    macaron: 'berry-twilight', mint: 'mint-summer', forest: 'mint-summer', 'retro-doodle': 'milk-tea', sky: 'blue'
+    lavender: 'default', peach: 'warm-journal', mint: 'forest', sky: 'blue',
+    default: 'default', 'warm-journal': 'warm-journal', macaron: 'macaron', forest: 'forest', 'retro-doodle': 'retro-doodle', blue: 'blue',
+    sunlight: 'sunlight', 'berry-twilight': 'berry-twilight', 'mint-summer': 'mint-summer', 'milk-tea': 'milk-tea', blackboard: 'blackboard'
   };
   const LEGACY_DEFAULT_SCHEDULE = [
     ['數學', '08:40', '09:20'], ['國語', '09:30', '10:10'], ['自然', '10:25', '11:05'],
@@ -61,7 +62,7 @@
   const DEFAULT_CONFIG = () => ({
     schoolName: '廍子國小', className: '三年二班', classSize: 27, expected: 27, actual: 27, absentSeats: '',
     examTitle: '期中定期評量', examDate: taipeiDate(), soundEnabled: false, showBopomofo: false,
-    themeStyle: 'berry-twilight',
+    themeStyle: 'default',
     subjects: [...COURSE_OPTIONS],
     reminders: {
       examInterval: 5,
