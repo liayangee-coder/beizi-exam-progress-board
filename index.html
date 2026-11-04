@@ -7,8 +7,8 @@
   <meta name="description" content="廍子國小段考進度看板，提供教師自訂班級、出缺席與考程，適合教室大螢幕使用。">
   <title>段考進度看板｜廍子國小</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="exam-board.css?v=attendance-defaults-20261104">
-  <script src="exam-board.js?v=attendance-defaults-20261104" defer></script>
+  <link rel="stylesheet" href="exam-board.css?v=subject-digital-clock-20261104">
+  <script src="exam-board.js?v=subject-digital-clock-20261104" defer></script>
 </head>
 <body>
   <div class="exam-app" id="examApp">
@@ -51,6 +51,7 @@
           </div>
           <div class="subject-block">
             <h2 id="currentSubject">載入中</h2>
+            <time class="subject-digital-clock" id="subjectClockDisplay" aria-label="目前時間" datetime="">--:--:--</time>
           </div>
           <div class="current-heading-side current-heading-side--right">
             <div class="current-time-pill"><span aria-hidden="true">◷</span><strong id="currentTimeRange">--:-- – --:--</strong></div>

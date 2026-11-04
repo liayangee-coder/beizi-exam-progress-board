@@ -345,6 +345,9 @@
   function updateClock(now = new Date()) {
     const p = taipeiParts(now);
     $('#clockDisplay').textContent = `${p.hour}:${p.minute}:${p.second}`;
+    const subjectClock = $('#subjectClockDisplay');
+    subjectClock.textContent = `${p.hour}:${p.minute}:${p.second}`;
+    subjectClock.dateTime = `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}:${p.second}+08:00`;
     const dateLabel = new Intl.DateTimeFormat('zh-TW', { timeZone:'Asia/Taipei', year:'numeric', month:'2-digit', day:'2-digit', weekday:'long' }).format(now);
     setAnnotatedText($('#dateDisplay'), dateLabel);
     setAnnotatedText($('#scheduleDate'), config.examDate === taipeiDate(now) ? '今日考程' : formatDate(config.examDate));
