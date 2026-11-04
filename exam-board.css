@@ -440,7 +440,7 @@ body.show-bopomofo .bpmf-font-text{font-family:"Bpmf Huninn Local","Microsoft Jh
 @media(max-width:520px){.subject-block{gap:7px}.subject-digital-clock{padding:6px 8px;font-size:clamp(14px,4vw,18px);border-radius:10px}}
 
 /* Give the classroom clock equal visual weight to the subject; keep the exam range secondary. */
-.subject-digital-clock{padding:4px 8px;border:0;border-radius:0;background:transparent;color:var(--theme-accent-strong,#5b237f);font-size:clamp(33px,4vw,69px);font-weight:950;letter-spacing:0}
+.subject-digital-clock{padding:4px 8px;border:0;border-radius:0;background:transparent;color:var(--primary-accent,#8952c1);font-size:clamp(33px,4vw,69px);font-weight:950;letter-spacing:0}
 .current-time-pill strong{font-size:clamp(17px,1.6vw,27px)}
-@media(max-width:800px){.subject-digital-clock{font-size:clamp(30px,7vw,52px)}.current-time-pill strong{font-size:clamp(15px,2.8vw,22px)}}
-@media(max-width:520px){.subject-digital-clock{font-size:clamp(24px,7.5vw,38px)}.current-time-pill strong{font-size:clamp(14px,4vw,18px)}}
+@media(max-width:800px){.subject-digital-clock{font-size:clamp(48px,7vw,76px)}.current-time-pill strong{font-size:clamp(15px,2.8vw,22px)}}
+@media(max-width:520px){.subject-block{flex-wrap:wrap}.subject-digital-clock{font-size:clamp(40px,12vw,62px)}.current-time-pill strong{font-size:clamp(14px,4vw,18px)}}
