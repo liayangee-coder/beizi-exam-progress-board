@@ -492,23 +492,30 @@
   function renderAbsenceReasons() {
     const list = $('#absenceReasonsDisplay');
     const card = list.closest('.absent-stat');
-    const entries = normalizeAbsenceEntries(config.absenceEntries, config.absentSeats)
-      .filter((entry) => entry.reason);
+    const entries = normalizeAbsenceEntries(config.absenceEntries, config.absentSeats);
+    const hasSelectedReason = entries.some((entry) => entry.reason);
+    const displayEntries = hasSelectedReason ? entries : [];
     list.replaceChildren();
-    card.classList.toggle('has-absence-reasons', entries.length > 0);
-    list.hidden = entries.length === 0;
-    entries.forEach((entry) => {
-      const reason = ABSENCE_REASON_OPTIONS.find(([value]) => value === entry.reason)?.[1];
-      if (!reason) return;
+    card.classList.toggle('has-absence-reasons', displayEntries.length > 0);
+    list.hidden = displayEntries.length === 0;
+    displayEntries.forEach((entry) => {
+      const reason = ABSENCE_REASON_OPTIONS.find(([value]) => value === entry.reason)?.[1] || '原因待選';
       const item = document.createElement('span');
-      item.className = 'absence-reason-chip';
-      item.textContent = `${entry.seat} 號｜${reason}`;
+      const seat = document.createElement('span');
+      const reasonLabel = document.createElement('span');
+      item.className = 'absence-reason-item';
+      item.setAttribute('role', 'listitem');
+      seat.className = 'absence-reason-seat';
+      reasonLabel.className = 'absence-reason-label';
+      seat.textContent = entry.seat;
+      reasonLabel.textContent = reason;
+      item.append(seat, reasonLabel);
       list.append(item);
     });
-    if (entries.length) {
-      const summary = entries.map((entry) => {
-        const reason = ABSENCE_REASON_OPTIONS.find(([value]) => value === entry.reason)?.[1];
-        return `${entry.seat} 號 ${reason}`;
+    if (displayEntries.length) {
+      const summary = displayEntries.map((entry) => {
+        const reason = ABSENCE_REASON_OPTIONS.find(([value]) => value === entry.reason)?.[1] || '原因待選';
+        return `${entry.seat} 號，${reason}`;
       }).join('、');
       list.setAttribute('aria-label', `缺席原因：${summary}`);
       $('#absentSeatsDisplay').setAttribute('aria-label', `缺席座號 ${displayAbsentSeats(config.absentSeats)}；${summary}`);

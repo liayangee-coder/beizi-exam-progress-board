@@ -7,8 +7,8 @@
   <meta name="description" content="廍子國小段考進度看板，提供教師自訂班級、出缺席與考程，適合教室大螢幕使用。">
   <title>段考進度看板｜廍子國小</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="exam-board.css?v=responsive-layout-fix-20261105">
-  <script src="exam-board.js?v=absence-reasons-20261105" defer></script>
+  <link rel="stylesheet" href="exam-board.css?v=absence-seat-reason-stack-20261105">
+  <script src="exam-board.js?v=absence-seat-reason-stack-20261105" defer></script>
 </head>
 <body>
   <div class="exam-app" id="examApp">
@@ -78,7 +78,7 @@
             <article class="stat-card class-stat"><span class="stat-label">班級人數</span><strong id="classCountDisplay">30<span>人</span></strong></article>
             <article class="stat-card expected-stat"><span class="stat-label">應到</span><strong id="expectedCountDisplay">30<span>人</span></strong></article>
             <article class="stat-card actual-stat"><span class="stat-label">實到</span><strong id="actualCountDisplay">29<span>人</span></strong></article>
-            <article class="stat-card absent-stat"><span class="stat-label">缺席座號</span><strong class="absent-number" id="absentSeatsDisplay">08</strong><div class="absence-reason-list" id="absenceReasonsDisplay" aria-label="缺席座號與原因" hidden></div></article>
+            <article class="stat-card absent-stat"><span class="stat-label">缺席座號</span><strong class="absent-number" id="absentSeatsDisplay">08</strong><div class="absence-reason-list" id="absenceReasonsDisplay" role="list" aria-label="缺席座號與原因" hidden></div></article>
           </div>
           <p class="independent-note" id="independentNote">數字由教師分別輸入；座號不參與人數計算。</p>
         </section>

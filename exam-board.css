@@ -583,10 +583,12 @@ body.show-bopomofo .bpmf-font-text{font-family:"Bpmf Huninn Local","Microsoft Jh
 .absence-entry-chip{display:inline-flex;align-items:center;gap:7px;padding:5px 8px 5px 11px;border:1px solid #e2d4ee;border-radius:999px;background:#f7f1fc;color:#563875;font-size:14px;font-weight:800}
 .remove-absence-button{display:grid;place-items:center;width:23px;height:23px;border:0;border-radius:50%;background:#eadcf5;color:#5b347b;font-size:17px;line-height:1;cursor:pointer}
 .absence-entry-controls :focus-visible,.remove-absence-button:focus-visible{outline:3px solid #9b6dc3;outline-offset:2px}
-.absence-reason-list{display:flex;flex-wrap:wrap;justify-content:center;gap:5px;width:100%;max-height:68px;margin-top:4px;overflow:auto;scrollbar-width:thin}
-.absence-reason-chip{display:inline-flex;align-items:center;justify-content:center;min-height:28px;padding:3px 9px;border:1px solid rgba(142,63,120,.2);border-radius:999px;background:rgba(255,255,255,.78);color:#71365f;font-size:clamp(14px,.95vw,19px);font-weight:850;line-height:1.15;white-space:nowrap}
-.absent-stat.has-absence-reasons{justify-content:flex-start;gap:3px}
-.absent-stat.has-absence-reasons .absent-number{font-size:clamp(34px,2.5vw,48px);line-height:1}
+.absence-reason-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(68px,1fr));align-content:center;justify-items:stretch;gap:5px;width:100%;min-height:0;max-height:100%;margin-top:2px;overflow:auto;scrollbar-width:thin}
+.absence-reason-item{display:grid;align-content:center;justify-items:center;gap:2px;min-width:0;min-height:48px;padding:4px 7px;border:1px solid rgba(142,63,120,.2);border-radius:13px;background:rgba(255,255,255,.78);text-align:center}
+.absence-reason-seat{color:var(--ink);font-size:clamp(28px,2.1vw,40px);font-weight:950;line-height:1;font-variant-numeric:tabular-nums}
+.absence-reason-label{color:#71365f;font-size:clamp(14px,.95vw,18px);font-weight:900;line-height:1.15;overflow-wrap:anywhere}
+.absent-stat.has-absence-reasons{justify-content:center;gap:2px}
+.absent-stat.has-absence-reasons .absent-number{display:none}
 @media(max-height:850px) and (min-width:1121px){
   .attendance-panel .stat-label{font-size:clamp(22px,1.65vw,32px)}
   .attendance-panel .stat-card strong{font-size:clamp(80px,4.8vw,92px)}
@@ -603,7 +605,8 @@ body.show-bopomofo .bpmf-font-text{font-family:"Bpmf Huninn Local","Microsoft Jh
   .attendance-panel .stat-card strong{font-size:clamp(42px,13vw,56px)}
   .absence-entry-controls{grid-template-columns:minmax(70px,.7fr) minmax(0,1.3fr)}
   .absence-entry-controls button{padding-inline:7px;font-size:13px}
-  .absence-reason-list{max-height:62px;gap:4px}
-  .absence-reason-chip{min-height:25px;padding:2px 7px;font-size:14px}
-  .absent-stat.has-absence-reasons .absent-number{font-size:34px}
+  .absence-reason-list{gap:4px}
+  .absence-reason-item{min-height:42px;padding:3px 5px}
+  .absence-reason-seat{font-size:clamp(25px,7vw,34px)}
+  .absence-reason-label{font-size:14px}
 }
