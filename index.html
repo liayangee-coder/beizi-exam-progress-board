@@ -7,8 +7,8 @@
   <meta name="description" content="廍子國小段考進度看板，提供教師自訂班級、出缺席與考程，適合教室大螢幕使用。">
   <title>段考進度看板｜廍子國小</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="exam-board.css?v=projection-hints-table-20-20261104">
-  <script src="exam-board.js?v=clock-emphasis-2-20261104" defer></script>
+  <link rel="stylesheet" href="exam-board.css?v=absence-reasons-title-spacing-20261105">
+  <script src="exam-board.js?v=absence-reasons-20261105" defer></script>
 </head>
 <body>
   <div class="exam-app" id="examApp">
@@ -78,7 +78,7 @@
             <article class="stat-card class-stat"><span class="stat-label">班級人數</span><strong id="classCountDisplay">30<span>人</span></strong></article>
             <article class="stat-card expected-stat"><span class="stat-label">應到</span><strong id="expectedCountDisplay">30<span>人</span></strong></article>
             <article class="stat-card actual-stat"><span class="stat-label">實到</span><strong id="actualCountDisplay">29<span>人</span></strong></article>
-            <article class="stat-card absent-stat"><span class="stat-label">缺席座號</span><strong class="absent-number" id="absentSeatsDisplay">08</strong></article>
+            <article class="stat-card absent-stat"><span class="stat-label">缺席座號</span><strong class="absent-number" id="absentSeatsDisplay">08</strong><div class="absence-reason-list" id="absenceReasonsDisplay" aria-label="缺席座號與原因" hidden></div></article>
           </div>
           <p class="independent-note" id="independentNote">數字由教師分別輸入；座號不參與人數計算。</p>
         </section>
@@ -117,8 +117,24 @@
             <label class="field-column"><span>應到人數</span><input id="expectedInput" name="expected" type="number" min="0" step="1" inputmode="numeric"></label>
             <label class="field-column"><span>實到人數</span><input id="actualInput" name="actual" type="number" min="0" step="1" inputmode="numeric"></label>
           </div>
-          <label class="field-row"><span>缺席座號</span><input id="absentInput" name="absentSeats" type="text" maxlength="120" autocomplete="off" placeholder="例如：08、12"></label>
-          <p class="field-hint">缺席座號不會自動計算人數，也不會改動上方任何人數欄位。</p>
+          <div class="absence-entry-field">
+            <span class="absence-entry-label">新增缺席座號與原因</span>
+            <div class="absence-entry-controls">
+              <input id="absentInput" type="text" inputmode="numeric" maxlength="3" autocomplete="off" placeholder="座號" aria-label="缺席座號">
+              <select id="absentReasonInput" aria-label="缺席原因">
+                <option value="">請選擇原因</option>
+                <option value="personal">事假</option>
+                <option value="sick">病假</option>
+                <option value="official">公假</option>
+                <option value="other">其他</option>
+                <option value="potential">潛能班</option>
+              </select>
+              <button class="add-absence-button" id="addAbsentButton" type="button">＋ 新增缺席</button>
+              <button class="clear-absence-button" id="clearAbsentButton" type="button">清空缺席</button>
+            </div>
+            <div class="absence-entry-list" id="absenceEntriesList" aria-live="polite"></div>
+          </div>
+          <p class="field-hint">缺席座號沿用原本保存方式；原因只在本次開啟期間暫時顯示，不寫入瀏覽器或傳送到 GAS，也不會改動人數。</p>
           <div class="validation-message" id="attendanceValidation" role="status" hidden></div>
         </section>
 

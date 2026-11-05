@@ -3,6 +3,7 @@
 
   const STORAGE_KEY = 'buzies-exam-progress-board-v1';
   const COURSE_OPTIONS = ['國語', '數學', '英語', '自然', '社會', '健康', '自修', '作文', '資訊', '體育', '國文', '英文', '生活'];
+  const ABSENCE_REASON_OPTIONS = [['personal', '事假'], ['sick', '病假'], ['official', '公假'], ['other', '其他'], ['potential', '潛能班']];
   const THEME_STYLE_OPTIONS = ['default', 'warm-journal', 'macaron', 'forest', 'retro-doodle', 'blue', 'sunlight', 'berry-twilight', 'mint-summer', 'milk-tea', 'blackboard', 'deep-ocean', 'midnight-violet', 'dark-espresso', 'cyber-night'];
   const LEGACY_THEME_STYLES = {
     lavender: 'default', peach: 'warm-journal', mint: 'forest', sky: 'blue',
@@ -60,7 +61,7 @@
   };
 
   const DEFAULT_CONFIG = () => ({
-    schoolName: '廍子國小', className: '三年二班', classSize: 27, expected: 27, actual: 27, absentSeats: '',
+    schoolName: '廍子國小', className: '三年二班', classSize: 27, expected: 27, actual: 27, absentSeats: '', absenceEntries: [],
     examTitle: '期中定期評量', examDate: taipeiDate(), soundEnabled: false, showBopomofo: false,
     themeStyle: 'default',
     subjects: [...COURSE_OPTIONS],
@@ -87,6 +88,7 @@
   const examAudio = $('#examAudio');
   const examAudioFileInput = $('#examAudioFile');
   let config = loadConfig();
+  let absenceEntriesDraft = [];
   let lastScheduleStates = null;
   let audioContext = null;
   let examAudioObjectUrl = '';
@@ -123,12 +125,12 @@
         && Number(parsed.classSize) === 30 && Number(parsed.expected) === 30
         && Number(parsed.actual) === 29 && String(parsed.absentSeats ?? '').trim() === '08';
       const normalized = normalizeConfig(parsed, fallback);
-      if (migrateLegacyAttendance) Object.assign(normalized, { classSize: 27, expected: 27, actual: 27, absentSeats: '' });
+      if (migrateLegacyAttendance) Object.assign(normalized, { classSize: 27, expected: 27, actual: 27, absentSeats: '', absenceEntries: [] });
       if (migrateLegacySchedule || migrateLegacyAttendance) {
         const migrated = {
           ...parsed,
           ...(migrateLegacySchedule ? { schedule: normalized.schedule } : {}),
-          ...(migrateLegacyAttendance ? { classSize: 27, expected: 27, actual: 27, absentSeats: '' } : {})
+          ...(migrateLegacyAttendance ? { classSize: 27, expected: 27, actual: 27, absentSeats: '', absenceEntries: [] } : {})
         };
         try { localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated)); } catch (error) { /* Keep the normalized view even if storage is unavailable. */ }
       }
@@ -137,8 +139,26 @@
       return fallback;
     }
   }
+  function normalizeAbsenceEntries(entries, legacySeats = '') {
+    const source = Array.isArray(entries)
+      ? entries
+      : String(legacySeats || '').split(/[\s,，、]+/).filter(Boolean).map((seat) => ({ seat, reason: '' }));
+    const seen = new Set();
+    return source.flatMap((entry) => {
+      const seat = String(entry?.seat ?? '').trim();
+      if (!/^\d{1,3}$/.test(seat) || Number(seat) < 1 || seen.has(Number(seat))) return [];
+      seen.add(Number(seat));
+      const reason = ABSENCE_REASON_OPTIONS.some(([value]) => value === entry?.reason) ? entry.reason : '';
+      return [{ seat, reason }];
+    });
+  }
   function normalizeConfig(value, fallback = DEFAULT_CONFIG()) {
     const safe = value && typeof value === 'object' ? value : {};
+    const hasAbsenceEntries = Array.isArray(safe.absenceEntries);
+    const absenceEntries = normalizeAbsenceEntries(safe.absenceEntries, safe.absentSeats ?? fallback.absentSeats);
+    const absentSeats = hasAbsenceEntries
+      ? absenceEntries.map((entry) => entry.seat).join('、')
+      : (typeof safe.absentSeats === 'string' ? safe.absentSeats : fallback.absentSeats);
     const savedSchedule = Array.isArray(safe.schedule) ? safe.schedule.filter((item) => item && typeof item === 'object').map((item) => ({ id: String(item.id || uid()), subject: String(item.subject ?? ''), start: String(item.start ?? ''), end: String(item.end ?? '') })) : fallback.schedule;
     const schedule = isLegacyDefaultSchedule(savedSchedule) ? fallback.schedule : savedSchedule;
     const reminderData = safe.reminders && typeof safe.reminders === 'object' ? safe.reminders : {};
@@ -152,7 +172,8 @@
       classSize: safe.classSize ?? fallback.classSize,
       expected: safe.expected ?? fallback.expected,
       actual: safe.actual ?? fallback.actual,
-      absentSeats: typeof safe.absentSeats === 'string' ? safe.absentSeats : fallback.absentSeats,
+      absentSeats,
+      absenceEntries,
       examTitle: typeof safe.examTitle === 'string' ? safe.examTitle : fallback.examTitle,
       examDate: typeof safe.examDate === 'string' ? safe.examDate : fallback.examDate,
       themeStyle: THEME_STYLE_OPTIONS.includes(safe.themeStyle) ? safe.themeStyle : (LEGACY_THEME_STYLES[safe.themeStyle] || LEGACY_THEME_STYLES[safe.theme] || fallback.themeStyle),
@@ -179,7 +200,9 @@
   }
   function saveConfig() {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
+      const persistentConfig = { ...config };
+      delete persistentConfig.absenceEntries;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(persistentConfig));
       return true;
     } catch (error) {
       announce('瀏覽器無法保存設定，請檢查儲存空間或瀏覽器隱私設定。');
@@ -449,6 +472,7 @@
     $('#expectedCountDisplay').setAttribute('aria-label', `應到 ${config.expected} 人`);
     $('#actualCountDisplay').setAttribute('aria-label', `實到 ${config.actual} 人`);
     $('#absentSeatsDisplay').setAttribute('aria-label', `缺席座號 ${displayAbsentSeats(config.absentSeats)}`);
+    renderAbsenceReasons();
     $('#soundToggle').setAttribute('aria-pressed', String(config.soundEnabled));
     $('#soundIcon').textContent = config.soundEnabled ? '🔔' : '🔕';
     $('#soundState').textContent = config.soundEnabled ? '音效開' : '靜音';
@@ -464,6 +488,33 @@
     setAnnotatedText($('#independentNote'), $('#independentNote').textContent);
     setAnnotatedText($('#attendanceHeading'), '學生出缺席統計');
     setAnnotatedText($('#scheduleHeading'), '今日考試流程');
+  }
+  function renderAbsenceReasons() {
+    const list = $('#absenceReasonsDisplay');
+    const card = list.closest('.absent-stat');
+    const entries = normalizeAbsenceEntries(config.absenceEntries, config.absentSeats)
+      .filter((entry) => entry.reason);
+    list.replaceChildren();
+    card.classList.toggle('has-absence-reasons', entries.length > 0);
+    list.hidden = entries.length === 0;
+    entries.forEach((entry) => {
+      const reason = ABSENCE_REASON_OPTIONS.find(([value]) => value === entry.reason)?.[1];
+      if (!reason) return;
+      const item = document.createElement('span');
+      item.className = 'absence-reason-chip';
+      item.textContent = `${entry.seat} 號｜${reason}`;
+      list.append(item);
+    });
+    if (entries.length) {
+      const summary = entries.map((entry) => {
+        const reason = ABSENCE_REASON_OPTIONS.find(([value]) => value === entry.reason)?.[1];
+        return `${entry.seat} 號 ${reason}`;
+      }).join('、');
+      list.setAttribute('aria-label', `缺席原因：${summary}`);
+      $('#absentSeatsDisplay').setAttribute('aria-label', `缺席座號 ${displayAbsentSeats(config.absentSeats)}；${summary}`);
+    } else {
+      list.removeAttribute('aria-label');
+    }
   }
   function displayAbsentSeats(text) {
     const trimmed = String(text || '').trim();
@@ -583,7 +634,10 @@
     $('#classSizeInput').value = config.classSize;
     $('#expectedInput').value = config.expected;
     $('#actualInput').value = config.actual;
-    $('#absentInput').value = config.absentSeats;
+    $('#absentInput').value = '';
+    $('#absentReasonInput').value = '';
+    absenceEntriesDraft = normalizeAbsenceEntries(config.absenceEntries, config.absentSeats);
+    renderAbsenceEntries();
     $('#examTitleInput').value = config.examTitle;
     $('#examDateInput').value = config.examDate;
     $('#themeStyleInput').value = config.themeStyle;
@@ -598,6 +652,34 @@
     renderScheduleEditor(config.schedule);
     drawerSwitchDirty.showBopomofo = false;
     drawerSwitchDirty.soundEnabled = false;
+  }
+  function renderAbsenceEntries() {
+    const list = $('#absenceEntriesList');
+    list.replaceChildren();
+    if (!absenceEntriesDraft.length) {
+      const empty = document.createElement('span');
+      empty.className = 'absence-entry-empty';
+      empty.textContent = '尚未新增缺席座號';
+      list.append(empty);
+      return;
+    }
+    absenceEntriesDraft.forEach((entry, index) => {
+      const chip = document.createElement('span');
+      chip.className = 'absence-entry-chip';
+      const label = document.createElement('span');
+      label.textContent = `${entry.seat} 號・${ABSENCE_REASON_OPTIONS.find(([value]) => value === entry.reason)?.[1] || '原因待選'}`;
+      const remove = document.createElement('button');
+      remove.type = 'button';
+      remove.className = 'remove-absence-button';
+      remove.textContent = '×';
+      remove.setAttribute('aria-label', `移除 ${entry.seat} 號缺席資料`);
+      remove.addEventListener('click', () => {
+        absenceEntriesDraft.splice(index, 1);
+        renderAbsenceEntries();
+      });
+      chip.append(label, remove);
+      list.append(chip);
+    });
   }
   function syncDrawerSwitches() {
     if (!drawerSwitchDirty.showBopomofo) $('#drawerZhuyinToggle').checked = config.showBopomofo;
@@ -695,14 +777,13 @@
     }
     return { value };
   }
-  function absentSeatWarning(raw) {
-    const value = raw.trim();
-    if (!value) return '';
-    const tokens = value.split(/[\s,，、]+/).filter(Boolean);
-    const invalid = tokens.filter((token) => !/^\d{1,3}$/.test(token) || Number(token) < 1);
-    const duplicates = tokens.filter((token, index) => tokens.findIndex((candidate) => Number(candidate) === Number(token)) !== index);
-    if (invalid.length) return `缺席座號「${invalid.join('、')}」格式需為 1–3 位數字，請確認後再使用。`;
+  function absentSeatWarning(entries) {
+    const normalized = normalizeAbsenceEntries(entries);
+    if (normalized.length !== entries.length) return '缺席座號格式需為 1–3 位正整數，請確認。';
+    const duplicates = entries.filter((entry, index) => entries.findIndex((candidate) => Number(candidate.seat) === Number(entry.seat)) !== index);
     if (duplicates.length) return '缺席座號有重複項目，請確認。';
+    const missingReason = entries.filter((entry) => !ABSENCE_REASON_OPTIONS.some(([value]) => value === entry.reason));
+    if (missingReason.length) return `${missingReason.map((entry) => `${entry.seat} 號`).join('、')}尚未選擇缺席原因。`;
     return '';
   }
   function validateScheduleEditor(rows) {
@@ -746,6 +827,7 @@
     if (!examTitle) errors.push('請填寫評量名稱。');
     if (!examDate || !/^\d{4}-\d{2}-\d{2}$/.test(examDate)) errors.push('請設定有效的考試日期。');
     const reminderErrors = [examReminderInterval.error, breakReminderInterval.error].filter(Boolean);
+    const absenceEntries = normalizeAbsenceEntries(absenceEntriesDraft);
     const schedule = readScheduleEditor();
     const scheduleErrors = validateScheduleEditor(schedule);
     showValidation($('#attendanceValidation'), errors, 'error');
@@ -755,6 +837,8 @@
       errors, scheduleErrors, reminderErrors, schedule, className, examTitle, examDate,
       themeStyle: $('#themeStyleInput').value,
       classSize: classSize.value, expected: expected.value, actual: actual.value,
+      absenceEntries,
+      absentSeats: absenceEntries.map((entry) => entry.seat).join('、'),
       subjects: normalizeLineList($('#subjectListInput').value),
       reminders: {
         examInterval: examReminderInterval.value,
@@ -767,7 +851,7 @@
   function handleSave(event) {
     event.preventDefault();
     const values = collectFormValues();
-    const absentWarning = absentSeatWarning($('#absentInput').value);
+    const absentWarning = absentSeatWarning(values.absenceEntries);
     if (values.errors.length || values.scheduleErrors.length || values.reminderErrors.length) {
       const firstError = values.errors[0] || values.scheduleErrors[0] || values.reminderErrors[0];
       announce(firstError);
@@ -781,7 +865,8 @@
     config = normalizeConfig({
       ...config,
       className: values.className, classSize: values.classSize, expected: values.expected, actual: values.actual,
-      absentSeats: $('#absentInput').value.trim(), examTitle: values.examTitle, examDate: values.examDate,
+      absentSeats: values.absentSeats, absenceEntries: values.absenceEntries,
+      examTitle: values.examTitle, examDate: values.examDate,
       themeStyle: values.themeStyle,
       schedule: values.schedule, subjects: values.subjects, reminders: values.reminders,
       showBopomofo: $('#drawerZhuyinToggle').checked,
@@ -910,6 +995,42 @@
       rows.push({ id: uid(), subject: '', start: '', end: '' });
       renderScheduleEditor(rows);
       rowEditor.lastElementChild?.querySelector('[data-field="subject"]')?.focus();
+    });
+    $('#addAbsentButton').addEventListener('click', () => {
+      const seatInput = $('#absentInput');
+      const seatValue = seatInput.value.trim();
+      const reason = $('#absentReasonInput').value;
+      seatInput.classList.remove('form-invalid');
+      if (!/^\d{1,3}$/.test(seatValue) || Number(seatValue) < 1) {
+        seatInput.classList.add('form-invalid');
+        showValidation($('#attendanceValidation'), ['請輸入 1 至 999 的缺席座號。'], 'error');
+        seatInput.focus();
+        return;
+      }
+      const seat = Number(seatValue) < 100 ? seatValue.padStart(2, '0') : seatValue;
+      if (absenceEntriesDraft.some((entry) => Number(entry.seat) === Number(seat))) {
+        showValidation($('#attendanceValidation'), [`${seat} 號已在缺席名單中。`], 'error');
+        seatInput.focus();
+        return;
+      }
+      if (!ABSENCE_REASON_OPTIONS.some(([value]) => value === reason)) {
+        showValidation($('#attendanceValidation'), ['請先選擇缺席原因。'], 'error');
+        $('#absentReasonInput').focus();
+        return;
+      }
+      absenceEntriesDraft.push({ seat, reason });
+      renderAbsenceEntries();
+      seatInput.value = '';
+      $('#absentReasonInput').value = '';
+      showValidation($('#attendanceValidation'), [], 'warning');
+      seatInput.focus();
+    });
+    $('#clearAbsentButton').addEventListener('click', () => {
+      absenceEntriesDraft = [];
+      renderAbsenceEntries();
+      $('#absentInput').value = '';
+      $('#absentReasonInput').value = '';
+      showValidation($('#attendanceValidation'), [], 'warning');
     });
     form.addEventListener('submit', handleSave);
     $('#drawerZhuyinToggle').addEventListener('change', () => { drawerSwitchDirty.showBopomofo = true; });

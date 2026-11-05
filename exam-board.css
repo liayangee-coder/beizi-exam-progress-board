@@ -477,3 +477,116 @@ body.show-bopomofo .bpmf-font-text{font-family:"Bpmf Huninn Local","Microsoft Jh
 }
 @media(prefers-color-scheme:dark){:root[data-theme="blackboard"] #subjectClockDisplay{color:#70e1d4}}
 @media(max-height:850px) and (min-width:1121px){#subjectClockDisplay{font-size:clamp(42px,4vw,68px)}}
+
+/* Classroom projection typography: enlarge student-facing information and use available panel space. */
+.brand-lockup h1{font-size:clamp(32px,3vw,56px)}
+.school-label{font-size:clamp(16px,1.2vw,21px)}
+.class-chip{font-size:clamp(21px,2.2vw,38px)}
+.live-date strong{font-size:clamp(22px,2.2vw,36px)}
+.live-date span{font-size:clamp(13px,1vw,18px)}
+.hero-title-wrap h2{font-size:clamp(29px,3.5vw,72px)}
+.hero-kicker{font-size:clamp(14px,1.1vw,20px)}
+.hero-date{font-size:clamp(13px,1vw,18px)}
+.subject-block h2,#subjectClockDisplay{font-size:clamp(58px,6.5vw,110px);line-height:1.06}
+.current-tag{font-size:clamp(17px,1.9vw,32px)}
+.status-line,.status-detail,.completion-message,.reminder-message{font-size:clamp(26px,1.6vw,30px);line-height:1.4}
+.progress-label{font-size:clamp(26px,1.8vw,32px)}
+.progress-times{font-size:clamp(15px,1vw,19px)}
+.progress-times strong{font-size:clamp(16px,1.1vw,21px)}
+.schedule-panel .section-heading h2,.attendance-panel .section-heading h2{font-size:clamp(26px,1.9vw,36px)}
+.attendance-panel .section-heading{min-height:40px}
+.attendance-panel .stat-label{font-size:clamp(21px,1.4vw,28px)}
+.attendance-panel .stat-card strong{font-size:clamp(62px,4.3vw,82px)}
+.attendance-panel .stat-card strong span{font-size:.42em}
+.attendance-panel .independent-note{font-size:clamp(13px,.95vw,18px);line-height:1.35}
+.schedule-panel .schedule-date{font-size:clamp(14px,1vw,19px)}
+.schedule-panel .schedule-table,.schedule-panel .schedule-table th,.schedule-panel .schedule-table td{font-size:clamp(26px,1.5vw,30px);line-height:1.4}
+.schedule-panel .schedule-table th,.schedule-panel .schedule-table td{padding:12px 14px}
+.schedule-panel .schedule-status{padding:6px 11px;font-size:clamp(19px,1.3vw,25px);line-height:1.3}
+.board-footer{font-size:clamp(12px,.9vw,17px)}
+.sound-test-row{min-height:24px}
+.sound-test-row .text-button,.sound-test-row .small-note{font-size:clamp(12px,.9vw,17px)}
+
+@media(min-width:1121px){
+  .board-main{grid-template-rows:auto minmax(90px,.65fr) minmax(280px,1.05fr) minmax(215px,1fr) auto auto;gap:clamp(5px,.65vh,9px)}
+  .current-exam-card{gap:6px;padding:clamp(10px,.9vw,16px) clamp(12px,1.25vw,22px)}
+  .attendance-stats{gap:clamp(7px,.55vw,11px)}
+  .stat-card{padding:8px clamp(10px,1vw,16px)}
+  .schedule-panel .schedule-table tbody tr{height:clamp(48px,5.2vh,66px)}
+  .exam-app:fullscreen .board-main{grid-template-rows:auto minmax(90px,.65fr) minmax(280px,1.05fr) minmax(215px,1fr) auto auto}
+}
+
+@media(max-height:850px) and (min-width:1121px){
+  .board-main{grid-template-rows:auto minmax(72px,.55fr) minmax(250px,.95fr) minmax(205px,1fr) auto auto;gap:5px;padding:8px}
+  .subject-block h2,#subjectClockDisplay{font-size:clamp(58px,5.3vw,90px)}
+  .attendance-panel .stat-card strong{font-size:clamp(60px,4.2vw,78px)}
+  .schedule-panel .schedule-table tbody tr{height:clamp(44px,5vh,58px)}
+}
+
+@media(max-width:1120px){
+  .subject-block h2,#subjectClockDisplay{font-size:clamp(44px,8vw,78px)}
+  .schedule-panel .schedule-table,.schedule-panel .schedule-table th,.schedule-panel .schedule-table td{font-size:clamp(22px,2.4vw,26px)}
+  .schedule-panel .schedule-table th,.schedule-panel .schedule-table td{padding:10px 11px}
+  .attendance-panel .stat-label{font-size:clamp(17px,2.4vw,22px)}
+  .attendance-panel .stat-card strong{font-size:clamp(48px,7vw,68px)}
+}
+
+@media(max-width:520px){
+  .brand-lockup h1{font-size:clamp(21px,6.2vw,29px)}
+  .hero-title-wrap h2{font-size:clamp(18px,5.2vw,27px)}
+  .subject-block h2,#subjectClockDisplay{font-size:clamp(38px,11vw,58px)}
+  .current-tag{font-size:clamp(13px,4vw,17px)}
+  .status-line,.status-detail,.completion-message,.reminder-message{font-size:clamp(14px,3.8vw,18px)}
+  .progress-label{font-size:clamp(15px,4.5vw,20px)}
+  .schedule-panel .section-heading h2,.attendance-panel .section-heading h2{font-size:clamp(18px,4.8vw,23px)}
+  .attendance-panel .stat-label{font-size:clamp(14px,3.8vw,17px)}
+  .attendance-panel .stat-card strong{font-size:clamp(36px,12vw,50px)}
+  .schedule-panel .schedule-table,.schedule-panel .schedule-table th,.schedule-panel .schedule-table td{font-size:clamp(15px,4vw,18px)}
+  .schedule-panel .schedule-table th,.schedule-panel .schedule-table td{padding:9px 7px}
+  .schedule-panel .schedule-status{font-size:clamp(13px,3.6vw,16px)}
+}
+
+/* Title tracking and attendance statistics sized for a classroom projector. */
+.hero-title-wrap h2{font-size:clamp(32px,3.8vw,76px);letter-spacing:.12em;word-spacing:.08em}
+.attendance-panel .section-heading h2{font-size:clamp(30px,2.2vw,42px)}
+.attendance-panel .stat-label{font-size:clamp(24px,1.9vw,36px)}
+.attendance-panel .stat-card strong{font-size:clamp(72px,5vw,96px)}
+.attendance-panel .stat-card strong span{font-size:.4em}
+
+/* Per-seat absence entry and reason chips in the teacher settings drawer. */
+.absence-entry-field{display:grid;gap:8px;margin:10px 0 12px}
+.absence-entry-label{color:#60427a;font-size:clamp(15px,1vw,18px);font-weight:850}
+.absence-entry-controls{display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.2fr);gap:8px}
+.absence-entry-controls input,.absence-entry-controls select{width:100%;min-width:0;min-height:44px;padding:8px 10px;border:1.5px solid #d6c4e6;border-radius:11px;background:#fff;color:#38254e;font:inherit;font-size:16px}
+.absence-entry-controls button{min-height:42px;padding:7px 10px;border:1.5px solid #c8a9e5;border-radius:12px;background:#f3eaff;color:#5e347e;font:inherit;font-size:15px;font-weight:850;cursor:pointer}
+.absence-entry-controls .clear-absence-button{border-color:#e5cbd5;background:#fff2f6;color:#884e67}
+.absence-entry-controls button:hover{filter:brightness(.97)}
+.absence-entry-list{display:flex;flex-wrap:wrap;gap:7px;min-height:30px}
+.absence-entry-empty{align-self:center;color:#89779a;font-size:13px}
+.absence-entry-chip{display:inline-flex;align-items:center;gap:7px;padding:5px 8px 5px 11px;border:1px solid #e2d4ee;border-radius:999px;background:#f7f1fc;color:#563875;font-size:14px;font-weight:800}
+.remove-absence-button{display:grid;place-items:center;width:23px;height:23px;border:0;border-radius:50%;background:#eadcf5;color:#5b347b;font-size:17px;line-height:1;cursor:pointer}
+.absence-entry-controls :focus-visible,.remove-absence-button:focus-visible{outline:3px solid #9b6dc3;outline-offset:2px}
+.absence-reason-list{display:flex;flex-wrap:wrap;justify-content:center;gap:5px;width:100%;max-height:68px;margin-top:4px;overflow:auto;scrollbar-width:thin}
+.absence-reason-chip{display:inline-flex;align-items:center;justify-content:center;min-height:28px;padding:3px 9px;border:1px solid rgba(142,63,120,.2);border-radius:999px;background:rgba(255,255,255,.78);color:#71365f;font-size:clamp(14px,.95vw,19px);font-weight:850;line-height:1.15;white-space:nowrap}
+.absent-stat.has-absence-reasons{justify-content:flex-start;gap:3px}
+.absent-stat.has-absence-reasons .absent-number{font-size:clamp(34px,2.5vw,48px);line-height:1}
+@media(max-height:850px) and (min-width:1121px){
+  .attendance-panel .stat-label{font-size:clamp(22px,1.65vw,32px)}
+  .attendance-panel .stat-card strong{font-size:clamp(80px,4.8vw,92px)}
+}
+@media(max-width:1120px){
+  .hero-title-wrap h2{letter-spacing:.09em}
+  .attendance-panel .stat-label{font-size:clamp(20px,2.8vw,27px)}
+  .attendance-panel .stat-card strong{font-size:clamp(56px,8.4vw,78px)}
+}
+@media(max-width:520px){
+  .hero-title-wrap h2{font-size:clamp(21px,6vw,32px);letter-spacing:.06em;word-spacing:.02em}
+  .attendance-panel .section-heading h2{font-size:clamp(22px,5vw,27px)}
+  .attendance-panel .stat-label{font-size:clamp(17px,4.2vw,21px)}
+  .attendance-panel .stat-card strong{font-size:clamp(42px,13vw,56px)}
+  .absence-entry-controls{grid-template-columns:minmax(70px,.7fr) minmax(0,1.3fr)}
+  .absence-entry-controls button{padding-inline:7px;font-size:13px}
+  .absence-reason-list{max-height:62px;gap:4px}
+  .absence-reason-chip{min-height:25px;padding:2px 7px;font-size:14px}
+  .absent-stat.has-absence-reasons .absent-number{font-size:34px}
+}
